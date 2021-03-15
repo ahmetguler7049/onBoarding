@@ -18,7 +18,7 @@
                 {% if msg %}
                   <p>{{ msg | safe }}</p>
                 {% else %}
-                  <h2>
+                  <h2 style="color: #002a80">
                     Yönetici Girişi
                   </h2>
                 {% endif %}
@@ -32,9 +32,9 @@
                 <div class="form-group mb-3">
                   <div class="input-group input-group-alternative">
                     <div class="input-group-prepend">
-                      <span class="input-group-text"><i class="ni ni-hat-3"></i></span>
+                      <span class="input-group-text"><i class="ni ni-email-83"></i></span>
                     </div>
-                    {{ form.username }}
+                    {{ form.email }}
                   </div>
                 </div>
                 <div class="form-group">
@@ -62,8 +62,7 @@
               <a href="{% url 'login' %}" class="text-light"><small>Kullanıcı Girişi</small></a>
             </div>
             <div class="col-6 text-right">
-              <a target="_blank"
-                 href="{% url 'forgot_password' %}" class="text-light"><small>Şifremi Unuttum</small></a>
+              <a href="{% url 'forget_password' %}" class="text-light"><small>Şifremi Unuttum</small></a>
             </div>
           </div>
         </div>

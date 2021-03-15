@@ -7,21 +7,67 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
+
 class LoginForm(forms.Form):
-    username = forms.CharField(
-        widget=forms.TextInput(
+    email = forms.EmailField(
+        widget=forms.EmailInput(
             attrs={
-                "placeholder" : "Username",                
+                "placeholder": "E-posta",
                 "class": "form-control"
             }
         ))
     password = forms.CharField(
         widget=forms.PasswordInput(
             attrs={
-                "placeholder" : "Password",                
+                "placeholder" : "Şifre",
                 "class": "form-control"
             }
         ))
+
+
+class AdminLoginForm(forms.Form):
+    email = forms.EmailField(
+        widget=forms.EmailInput(
+            attrs={
+                "placeholder": "E-posta",
+                "class": "form-control"
+            }
+        ))
+    password = forms.CharField(
+        widget=forms.PasswordInput(
+            attrs={
+                "placeholder" : "Şifre",
+                "class": "form-control"
+            }
+        ))
+
+
+class ForgetForm(forms.Form):
+    email = forms.EmailField(
+        widget=forms.EmailInput(
+            attrs={
+                "placeholder": "E-posta",
+                "class": "form-control"
+            }
+        ))
+
+
+class ResetPasswordForm(forms.Form):
+    password = forms.CharField(
+        widget=forms.PasswordInput(
+            attrs={
+                "placeholder": "Şifre",
+                "class": "form-control"
+            }
+        ))
+    password_check = forms.CharField(
+        widget=forms.PasswordInput(
+            attrs={
+                "placeholder": "Şifre Tekrar",
+                "class": "form-control"
+            }
+        ))
+
 
 class SignUpForm(UserCreationForm):
     username = forms.CharField(
@@ -34,21 +80,21 @@ class SignUpForm(UserCreationForm):
     email = forms.EmailField(
         widget=forms.EmailInput(
             attrs={
-                "placeholder" : "Email",                
+                "placeholder" : "E-posta",
                 "class": "form-control"
             }
         ))
     password1 = forms.CharField(
         widget=forms.PasswordInput(
             attrs={
-                "placeholder" : "Password",                
+                "placeholder" : "Şifre",
                 "class": "form-control"
             }
         ))
     password2 = forms.CharField(
         widget=forms.PasswordInput(
             attrs={
-                "placeholder" : "Password check",                
+                "placeholder" : "Şifre Tekrar",
                 "class": "form-control"
             }
         ))

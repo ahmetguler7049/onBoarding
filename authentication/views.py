@@ -11,7 +11,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.forms.utils import ErrorList
 from django.http import HttpResponse
-from .forms import LoginForm, SignUpForm
+from .forms import LoginForm, SignUpForm, ForgetForm, ResetPasswordForm, AdminLoginForm
 
 
 def user_login_view(request):
@@ -40,7 +40,7 @@ def user_login_view(request):
 
 def admin_login_view(request):
 
-    form = LoginForm(request.POST or None)
+    form = AdminLoginForm(request.POST or None)
     msg = None
 
     if request.method == "POST":
@@ -60,9 +60,9 @@ def admin_login_view(request):
     return render(request, "accounts/admin_login.html", {"form": form, "msg" : msg})
 
 
-def forgot_password_view(request):
+def forget_password_view(request):
 
-    form = SignUpForm(request.POST or None)
+    form = ForgetForm(request.POST or None)
     msg = None
 
     if request.method == "POST":
@@ -79,7 +79,29 @@ def forgot_password_view(request):
         else:
             msg = 'Error validating the form'
 
-    return render(request, "accounts/forgot_password.html", {"form": form, "msg" : msg})
+    return render(request, "accounts/forget_password.html", {"form": form, "msg" : msg})
+
+
+def reset_password_view(request):
+
+    form = ResetPasswordForm(request.POST or None)
+    msg = None
+
+    if request.method == "POST":
+
+        if form.is_valid():
+            username = form.cleaned_data.get("username")
+            password = form.cleaned_data.get("password")
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect("/")
+            else:
+                msg = 'Invalid credentials'
+        else:
+            msg = 'Error validating the form'
+
+    return render(request, "accounts/reset-password.html", {"form": form, "msg" : msg})
 
 
 def register_user(request):
