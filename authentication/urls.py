@@ -1,7 +1,3 @@
-# -*- encoding: utf-8 -*-
-"""
-Copyright (c) 2019 - present AppSeed.us
-"""
 
 from django.urls import path
 from .views import user_login_view, register_user, admin_login_view, forget_password_view, reset_password_view
