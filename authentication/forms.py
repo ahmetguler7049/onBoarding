@@ -23,6 +23,10 @@ class LoginForm(forms.Form):
                 "class": "form-control"
             }
         ))
+    remember_me = forms.BooleanField(
+        required=False,
+        widget=forms.CheckboxInput(),
+    )
 
 
 class AdminLoginForm(forms.Form):

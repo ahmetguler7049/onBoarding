@@ -24,11 +24,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '!bhfe6a9&e1(-7z-gw+3_px9f3#15+gq&1m)u@+i1+h^hp#46y'
-
+GOOGLE_RECAPTCHA_SECRET_KEY = '6Le4x5MaAAAAAGsrGKkq2OOc4nn4Tv5Jx8_7ewzA'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['ec2-54-162-119-125.compute-1.amazonaws.com', '127.0.0.1']
+ALLOWED_HOSTS = ['ec2-54-162-119-125.compute-1.amazonaws.com', '127.0.0.1', 'localhost']
 
 
 # Application definition
@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'app',
     'authentication',
+    'whitenoise.runserver_nostatic',
+    'onBoarding',
 ]
 
 MIDDLEWARE = [
@@ -52,7 +54,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 ROOT_URLCONF = 'onBoarding.urls'
 LOGIN_REDIRECT_URL = "home"   # Route defined in app/urls.py
@@ -89,7 +94,7 @@ DATABASES = {
 
         'USER': 'postgres',
 
-        'PASSWORD': 'postgre_db_server_1*',
+        'PASSWORD': 'hqy#pbpbLMC8cHg',
 
         'HOST': 'localhost',
 
