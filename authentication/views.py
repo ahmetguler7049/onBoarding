@@ -33,6 +33,9 @@ def recaptcha_kontrol(request):
 
 def user_login_view(request):
     form = LoginForm(request.POST or None)
+    context = {
+        'form': form,
+    }
 
     if request.method == "POST":
 
@@ -42,13 +45,6 @@ def user_login_view(request):
             if result['success']:
                 email = form.cleaned_data.get('email')
                 password = form.cleaned_data.get('password')
-
-                if form.cleaned_data.get('remember_me'):
-                    session_age = 60 * 60 * 24 * 365 * 1  # 1 year
-                    request.session.set_expiry(session_age)
-                else:
-                    request.session.set_expiry(0)
-
 
                 try:
                     findUser = User._default_manager.get(email__iexact=email)
@@ -66,30 +62,46 @@ def user_login_view(request):
         else:
             messages.error(request, mark_safe('Tüm alanları eksiksiz bir şekilde doldurduğunuzdan emin olun!'))
 
-    return render(request, "accounts/login.html", {"form": form})
+    return render(request, "accounts/login.html", context=context)
 
 
 # TODO: Admin Login View'a göre formu özelleştir.
 
 def admin_login_view(request):
-    form = AdminLoginForm(request.POST or None)
-    msg = None
+    form = LoginForm(request.POST or None)
+    context = {
+        'form': form,
+    }
 
     if request.method == "POST":
 
         if form.is_valid():
-            username = form.cleaned_data.get("username")
-            password = form.cleaned_data.get("password")
-            user = authenticate(username=username, password=password)
-            if user is not None:
-                login(request, user)
-                return redirect("/")
-            else:
-                msg = 'Invalid credentials'
-        else:
-            msg = 'Error validating the form'
+            result = recaptcha_kontrol(request)
 
-    return render(request, "accounts/admin_login.html", {"form": form, "msg": msg})
+            if result['success']:
+                email = form.cleaned_data.get('email')
+                password = form.cleaned_data.get('password')
+
+                if not form.cleaned_data.get('remember_me'):
+                    request.session.set_expiry(0)
+
+                try:
+                    findUser = User._default_manager.get(email__iexact=email)
+                    if findUser is not None:
+                        if findUser.check_password(password):
+                            user_login_check = authenticate(username=findUser, password=password)
+                            login(request, user_login_check)
+                            return redirect("/")
+                        else:
+                            messages.error(request, mark_safe('Geçersiz Şifre!'))
+                except User.DoesNotExist:
+                    messages.error(request, mark_safe('E-posta adresi bulunamadı!'))
+            else:
+                messages.error(request, mark_safe('Geçersiz reCAPTCHA. Lütfen tekrar deneyin.'))
+        else:
+            messages.error(request, mark_safe('Tüm alanları eksiksiz bir şekilde doldurduğunuzdan emin olun!'))
+
+    return render(request, "accounts/admin_login.html", context=context)
 
 
 def forget_password_view(request):
@@ -138,14 +150,11 @@ def forget_password_view(request):
 
 def register_user(request):
     msg = None
-    success = False
-
     if request.method == "POST":
         form = SignUpForm(request.POST)
         if form.is_valid():
             form.save()
             msg = 'User created - please <a href="/login">login</a>.'
-
             # return redirect("/login/")
 
         else:
@@ -153,4 +162,4 @@ def register_user(request):
     else:
         form = SignUpForm()
 
-    return render(request, "accounts/register.html", {"form": form, "msg": msg, "success": success})
+    return render(request, "accounts/register.html", {"form": form, "msg": msg})

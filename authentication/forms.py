@@ -19,14 +19,10 @@ class LoginForm(forms.Form):
     password = forms.CharField(
         widget=forms.PasswordInput(
             attrs={
-                "placeholder" : "Şifre",
+                "placeholder": "Şifre",
                 "class": "form-control"
             }
         ))
-    remember_me = forms.BooleanField(
-        required=False,
-        widget=forms.CheckboxInput(),
-    )
 
 
 class AdminLoginForm(forms.Form):
@@ -74,20 +70,15 @@ class ResetPasswordForm(forms.Form):
 
 
 class SignUpForm(UserCreationForm):
-    username = forms.CharField(
-        widget=forms.TextInput(
-            attrs={
-                "placeholder" : "Username",                
-                "class": "form-control"
-            }
-        ))
     email = forms.EmailField(
         widget=forms.EmailInput(
             attrs={
                 "placeholder" : "E-posta",
                 "class": "form-control"
             }
-        ))
+        ),
+        required=True
+    )
     password1 = forms.CharField(
         widget=forms.PasswordInput(
             attrs={
@@ -105,4 +96,4 @@ class SignUpForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ('username', 'email', 'password1', 'password2')
+        fields = ('email', 'password1')

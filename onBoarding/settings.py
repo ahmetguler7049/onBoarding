@@ -28,7 +28,7 @@ GOOGLE_RECAPTCHA_SECRET_KEY = '6Le4x5MaAAAAAGsrGKkq2OOc4nn4Tv5Jx8_7ewzA'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['ec2-54-162-119-125.compute-1.amazonaws.com', '127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['ec2-54-162-119-125.compute-1.amazonaws.com', '127.0.0.1', 'localhost', '192.168.1.41', '1.1.1.1']
 
 
 # Application definition

@@ -14,7 +14,7 @@
 
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. -->
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 
 <!-- Static assets - Used to load the Favicon -->
 {% load static %}
@@ -28,15 +28,17 @@
   </title>
 
   <!-- Favicon - loaded as static -->
-  <link href="{% static 'assets/img/brand/favicon.ico' %}" rel="icon" type="image/png">
+  <link href="../../static/assets/img/brand/favicon.ico" rel="icon" type="image/png">
   
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
   <!-- Icons -->
-  <link href="/static/assets/js/plugins/nucleo/css/nucleo.css" rel="stylesheet" />
-  <link href="/static/assets/js/plugins/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet" />
+  <link href="../../static/assets/js/plugins/nucleo/css/nucleo.css" rel="stylesheet" />
+  <link href="../../static/assets/js/plugins/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.css" type="text/css" />
+  <link href="../../static/assets/js/plugins/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet" />
   <!-- CSS Files -->
-  <link href="/static/assets/css/argon-dashboard.css?v=1.1.0" rel="stylesheet" />
+  <link href="../../static/assets/css/argon-dashboard.css?v=1.1.0" rel="stylesheet" />
 
   <!-- Specific CSS goes HERE -->
   {% block stylesheets %}{% endblock stylesheets %}
@@ -44,12 +46,18 @@
 </head>
 
 <body class="">
+  {% if request.user.is_authenticated %}
 
-  {% include "includes/sidenav.html" %}
+    {% include "includes/sidenav.html" %}
+
+  {% endif %}
 
   <div class="main-content">
+      {% if request.user.is_authenticated %}
 
-    {% include "includes/navigation.html" %}
+        {% include "includes/navigation.html" %}
+
+      {% endif %}
 
     {% block content %}{% endblock content %}
 

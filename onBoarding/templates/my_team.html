@@ -1,0 +1,150 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+{% block title %} Profile {% endblock title %}
+
+{% block content %}
+
+    <!-- Header -->
+    {% if request.user.is_authenticated %}
+        <div class="header pb-8 pt-5 pt-lg-8 d-flex align-items-center"
+             style="min-height: 600px; background-image: url(../static/assets/img/theme/profile-cover.jpg) ; background-size: cover; background-position: center top;">
+          <!-- Mask -->
+          <span class="mask bg-gradient-default opacity-8"></span>
+          <!-- Header container -->
+          <div class="container-fluid d-flex align-items-center">
+            <div class="row">
+              <div class="col-lg-7 col-md-10">
+                <h1 class="display-2 text-white">Merhaba {{ request.user.username }}</h1>
+                <p class="text-white mt-0 mb-5">Burası senin ekip sayfan. Burada ekip bilgilerini görüntüleyebilir veya değiştirebilirsin.</p>
+    <!--            <a href="#!" class="btn btn-info">Edit profile</a>-->
+              </div>
+            </div>
+          </div>
+        </div>
+    {% else %}
+        <div class="header pb-8 pt-5 pt-lg-8 d-flex align-items-center"
+             style="min-height: 100px; background-image: url(../static/assets/img/theme/profile-cover.jpg) ; background-size: cover; background-position: center top;">
+          <!-- Mask -->
+          <span class="mask bg-gradient-default opacity-8"></span>
+          <!-- Header container -->
+          <div class="container-fluid d-flex align-items-center">
+            <div class="row">
+              <div class="col-lg-7 col-md-10">
+                <h1 class="display-2 text-white">Merhaba</h1>
+                <p class="text-white mt-0 mb-5">Ekip bilgierini doldurma sayfasına hoşgeldin. Bu sayfayı ekip lideri olman neticesinde görüntülüyorsun. Bilgileri eksiksiz doldurduğundan emin ol. Panelin içerisindeki "Ekibim" sayfasından yine ekip bilgilerini görüntülüyelebilir veya değiştirebilirsin, yine aynı sayfadan ekip arkadaşlarını ekleyebilirsin.</p>
+    <!--            <a href="#!" class="btn btn-info">Edit profile</a>-->
+              </div>
+            </div>
+          </div>
+        </div>
+    {% endif %}
+
+    <div class="container-fluid mt--7">
+
+      <div class="row">
+        <div class="col-xl-10 center">
+          <div class="card bg-secondary shadow">
+            <div class="card-header bg-white border-0">
+              <div class="row align-items-center">
+                <div class="col-8">
+                  <h3 class="mb-0">Ekibim</h3>
+                </div>
+                  {% if request.user.is_authenticated %}
+                    <div class="col-4 text-right">
+                      <a href="#!" class="btn btn-sm btn-primary">Değişiklikleri Kaydet</a>
+                    </div>
+                  {% endif %}
+              </div>
+            </div>
+            <div class="card-body">
+              <form>
+                <h6 class="heading-small text-muted mb-4">Genel Bilgiler</h6>
+                <div class="pl-lg-4">
+                  <div class="row">
+                    <div class="col-lg-6">
+<!--                  # TODO: Buraya username yerine full_name gelecek.  -->
+                      <div class="form-group">
+                        <label class="form-control-label" for="input-girisim">Girişimin İsmi</label>
+                        <input type="text" id="input-girisim" class="form-control form-control-alternative">
+                      </div>
+                    </div>
+                    <div class="col-lg-6">
+<!--                  # TODO: Dropdown olacak-->
+                        <div class="form-group">
+                            <div class="form-group">
+                                <label class="form-control-label" for="input-kisi_sayisi">Ekip Büyüklüğü</label>
+                                <input type="text" id="input-kisi_sayisi" class="form-control form-control-alternative"
+                                       placeholder="Sayı ile giriniz">
+                            </div>
+                        </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-lg-6">
+                      <div class="form-group">
+                            <div class="form-group">
+                                <label class="form-control-label" for="input-bootcamp">Bootcamp</label>
+                                <input type="text" id="input-bootcamp" class="form-control form-control-alternative"
+                                       placeholder="Programa seçildiğiniz etkinlik">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+<!--                  # TODO: Form tarafını unutma!      -->
+                      <div class="form-group">
+                        <label class="form-control-label" for="input-teknik">Ekipte teknik üye var mı?</label>
+                        <select id="input-teknik" class="form-control">
+                          <option selected>Var</option>
+                          <option>Yok</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                          <div class="form-group">
+                            <label class="form-control-label" for="input-bolum">Bölüm</label>
+                            <select id="input-bolum" class="form-control">
+                                <option selected>Mühendislik</option>
+                                <option>Doktorluk</option>
+                                <option>Çöpçülük</option>
+                                <option>Eczacılık</option>
+
+                            </select>
+                          </div>
+                        </div>
+                    </div>
+                </div>
+                <hr class="my-4" />
+                <!-- Address -->
+                <h6 class="heading-small text-muted mb-4">Ek Bilgiler</h6>
+                <div class="pl-lg-4">
+                    <div class="row">
+                        <div class="col-lg-10">
+                          <div class="form-group">
+                              <label class="form-control-label">Girişim Özeti</label>
+                              <textarea id="my-textarea" maxlength="450" rows="4" class="form-control form-control-alternative" placeholder="Girişiminizden kısaca bahsedin"></textarea>
+                              <span><small id="remainingC"></small></span>
+                          </div>
+                        </div>
+                    </div>
+                </div>
+                  {% if not request.user.is_authenticated %}
+                    <div class="col-4 center" style="left: 57%">
+                      <button type="submit" class="btn btn-primary my-4" name="complete_profile">Profili Tamamla</button>
+                    </div>
+                  {% endif %}
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {% include "includes/footer.html" %}
+
+    </div>
+
+{% endblock content %}
+
+<!-- Specific JS goes HERE -->
+{% block javascripts %}{% endblock javascripts %}

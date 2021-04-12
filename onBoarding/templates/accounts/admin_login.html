@@ -18,12 +18,20 @@
                 {% if msg %}
                   <p>{{ msg | safe }}</p>
                 {% else %}
-                  <h2 style="color: #002a80">
+                  <h2 style="color: #1a174d">
                     Yönetici Girişi
                   </h2>
                 {% endif %}
 
               </div>
+
+              {% if messages %}
+                {% for message in messages %}
+                    {% if message.tags == 'error' %}
+                        <div class="alert alert-danger">{{ message }}</div>
+                  {% endif %}
+                {% endfor %}
+              {% endif %}
 
               <form method="POST">
 
@@ -45,12 +53,8 @@
                     {{ form.password }}
                   </div>
                 </div>
-                <div class="custom-control custom-control-alternative custom-checkbox">
-                  <input class="custom-control-input" id=" customCheckLogin" type="checkbox">
-                  <label class="custom-control-label" for=" customCheckLogin">
-                    <span class="text-muted">Beni Hatırla</span>
-                  </label>
-                </div>
+
+                <div style="margin-top: 5%" class="g-recaptcha" data-sitekey="6Le4x5MaAAAAAFcJfQYv5toU2Is38BH7G6bNq7-T"></div>
                 <div class="text-center">
                   <button type="submit" class="btn btn-primary my-4">Giriş Yap</button>
                 </div>
