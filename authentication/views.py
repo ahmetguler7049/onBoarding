@@ -1,12 +1,14 @@
 # Create your views here.
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
 from django.core.exceptions import *
 
 from django.forms.utils import ErrorList
 from django.http import HttpResponse
 from .forms import LoginForm, SignUpForm, ForgetForm, ResetPasswordForm, AdminLoginForm
+
+from app.models import *
 
 from django.contrib import messages
 from django.utils.safestring import mark_safe
@@ -148,18 +150,18 @@ def forget_password_view(request):
 #     return render(request, "accounts/reset-password.html", {"form": form, "msg" : msg})
 
 
-def register_user(request):
-    msg = None
-    if request.method == "POST":
-        form = SignUpForm(request.POST)
-        if form.is_valid():
-            form.save()
-            msg = 'User created - please <a href="/login">login</a>.'
-            # return redirect("/login/")
-
-        else:
-            msg = 'Form is not valid'
-    else:
-        form = SignUpForm()
-
-    return render(request, "accounts/register.html", {"form": form, "msg": msg})
+# def register_user(request):
+#     msg = None
+#     if request.method == "POST":
+#         form = SignUpForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             msg = 'User created - please <a href="/login">login</a>.'
+#             # return redirect("/login/")
+#
+#         else:
+#             msg = 'Form is not valid'
+#     else:
+#         form = SignUpForm()
+#
+#     return render(request, "accounts/register.html", {"form": form, "msg": msg})

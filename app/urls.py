@@ -3,11 +3,10 @@
 from django.urls import path, re_path
 from app import views
 
-urlpatterns = [
 
+urlpatterns = [
     path('', views.index, name='home'),
     path('profil/', views.profile, name='profile'),
-    path('ekip/', views.ekip, name='ekip'),
-    path('plan/', views.is_teamleader, name='is_teamleader')
-
+    path('şirket/', views.ekip, name='ekip'),
+    # path('plan/', views.is_teamleader, name='is_teamleader')
 ]
