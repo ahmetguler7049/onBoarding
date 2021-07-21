@@ -103,16 +103,24 @@
 <!--              <i class="ni ni-pin-3 text-orange"></i> Maps-->
 <!--            </a>-->
 <!--          </li>-->
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'profile' %}">
-              <i class="ni ni-single-02 text-yellow"></i> Profilim
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'ekip' %}">
-              <i class="ni ni-building text-purple"></i> Şirketim
-            </a>
-          </li>
+        {% if not request.user.is_firm_manager %}
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'profile' %}">
+                  <i class="ni ni-single-02 text-yellow"></i> Profilim
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'ekip' %}">
+                  <i class="ni ni-building text-purple"></i> Şirketim
+                </a>
+              </li>
+        {% else %}
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'Bulk_Add_Users' %}">
+                  <i class="fa fa-users text-blue"></i> Kullanıcılar
+                </a>
+              </li>
+        {% endif %}
 <!--          <li class="nav-item">-->
 <!--            <a class="nav-link {% if 'tables' in segment %} active {% endif %}" href="/tables.html">-->
 <!--              <i class="ni ni-bullet-list-67 text-info"></i> Tables-->

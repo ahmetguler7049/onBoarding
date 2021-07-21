@@ -1074,6 +1074,12 @@ Girisim_Kategorileri = [
 ]
 
 
+class Firm(models.Model):
+    firm_name = models.CharField(max_length=250, verbose_name="Firma Adı", blank=False, null=False)
+    firm_domain = models.CharField(max_length=250, verbose_name="Domain", blank=False, null=False)
+    bulk_file = models.FileField(upload_to='excel/', verbose_name='Excel Dosyası', null=True)
+
+
 class Company(models.Model):
     company_name = models.CharField(max_length=250, choices=Girisimler, verbose_name="Girişim Adı", blank=False, null=False)
     team_size = models.IntegerField(verbose_name="Ekip Büyüklüğü", blank=True, null=True)
@@ -1100,7 +1106,8 @@ class User(AbstractUser):
     is_profile_completed = models.BooleanField(default=False)
     is_teamleader = models.BooleanField(default=False, verbose_name="Ekip Lideri", blank=True, null=True)
     company = models.ForeignKey(Company, on_delete=models.CASCADE, null=True)
-
+    firm = models.ForeignKey(Firm, on_delete=models.CASCADE, null=True)
+    is_firm_manager = models.BooleanField(default=False, verbose_name="Firma Yöneticisi", blank=True, null=True)
     objects = UserManager()
 
     pass

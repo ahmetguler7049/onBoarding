@@ -9,20 +9,17 @@ from django.utils.safestring import mark_safe
 from .models import *
 from django.db.models import Q
 from authentication.forms import SignUpForm, CompanyForm, CompanyDisabledFields
-
-
-# from django.contrib.auth.models import User
-
-
-@login_required(login_url="/login/")
-def index(request):
-    return render(request, "index.html")
+from django.utils.encoding import force_bytes, force_text, DjangoUnicodeDecodeError
+from django.utils.http import urlsafe_base64_decode
 
 
 def validation_control(request, user_values=None):
     if not request.user.is_authenticated:
         if user_values['password'] != user_values['password2']:
             message = 'Şifreler eşleşmiyor!'
+            return False, message
+        if len(user_values['password']) < 6:
+            message = 'Şifreniz çok kısa!'
             return False, message
 
         if 'yenikey' in user_values.keys():
@@ -33,16 +30,22 @@ def validation_control(request, user_values=None):
     return True, ''
 
 
-def profile(request):
+def complete_profile_view(request, uidb64, token):
     form = SignUpForm(request.POST or None)
+    user_id = force_text(urlsafe_base64_decode(uidb64))
+    user = User.objects.get(pk=user_id)
+
+    if user.is_profile_completed:
+        message = 'Hesabınız zaten aktive edilmiş.'
+        messages.warning(request, mark_safe(message))
+        return redirect('login')
+
     if not request.user.is_authenticated:
         form.fields['password'].required = True
         form.fields['password2'].required = True
 
     if 'complete_profile' in request.POST:
-        print('1' * 40)
         if form.is_valid():
-            print('2' * 40)
             email = form.cleaned_data.get("email")
             password = form.cleaned_data.get("password")
             password2 = form.cleaned_data.get("password2")
@@ -55,12 +58,10 @@ def profile(request):
             sınıf = form.cleaned_data.get("sınıf")
             bolum = form.cleaned_data.get("bolum")
             company_name = form.cleaned_data.get("company_name")
-
             team_leader_checkbox = request.POST.get("team_leader_checkbox")
-            user = User.objects.get(id=request.user.id)
 
             if team_leader_checkbox:
-                if User.objects.filter(is_teamleader=True, company__id=user.company.id):
+                if Company.objects.filter(company_name__iexact=company_name):
                     message = 'Şirketinizde bir ekip lideri bulunuyor!'
                     messages.error(request, mark_safe(message))
                     return redirect('profile')
@@ -71,8 +72,6 @@ def profile(request):
             linkedin_url = form.cleaned_data.get("linkedin_url")
             bio = form.cleaned_data.get("bio")
 
-            # dogum_gunu_obj = timezone.datetime.strptime(dogum_gunu, '%Y-%m-%d')
-            # dogum_gunu_timestamp = dogum_gunu_obj.timestamp()
             user_values = {
                 'email': email,
                 'password': password,
@@ -104,24 +103,25 @@ def profile(request):
                 else:
                     is_teamleader = False
 
-                User.objects.create_user(
-                    email=user_values['email'],
-                    password=user_values['password'],
-                    first_name=user_values['first_name'],
-                    last_name=user_values['last_name'],
-                    sehir=user_values['sehir'],
-                    dogum_gunu=user_values['dogum_gunu'],
-                    cinsiyet=user_values['cinsiyet'],
-                    universite=user_values['universite'],
-                    sınıf=user_values['sınıf'],
-                    bolum=user_values['bolum'],
-                    telefon=user_values['telefon'],
-                    linkedin_url=user_values['linkedin_url'],
-                    bio=user_values['bio'],
-                    company=company,
-                    is_teamleader=is_teamleader,
-                    is_profile_completed=True
-                )
+                if account_activation_token.check_token(user, token):
+                    user.email = user_values['email']
+                    user.set_password(user_values['password'])
+                    user.first_name = user_values['first_name']
+                    user.last_name = user_values['last_name']
+                    user.sehir = user_values['sehir']
+                    user.dogum_gunu = user_values['dogum_gunu']
+                    user.cinsiyet = user_values['cinsiyet']
+                    user.universite = user_values['universite']
+                    user.sınıf = user_values['sınıf']
+                    user.bolum = user_values['bolum']
+                    user.telefon = user_values['telefon']
+                    user.linkedin_url = user_values['linkedin_url']
+                    user.bio = user_values['bio']
+                    user.company = company
+                    user.is_teamleader = is_teamleader
+                    user.is_profile_completed = True
+                    user.is_active = True
+                    user.save()
 
                 if team_leader_checkbox:
                     return redirect('ekip')
@@ -129,9 +129,23 @@ def profile(request):
                 del request.session['user_values']
                 message = 'Kaydınız başarıyla oluşturuldu.'
                 messages.success(request, mark_safe(message))
-                return redirect('home')
+                return redirect('login')
             else:
                 messages.error(request, mark_safe(message))
+
+    user_filler = user.__dict__
+    form = SignUpForm(user_filler)
+    context = {
+        'form': form,
+    }
+    return render(request, 'profile.html', context=context)
+
+
+def profile(request):
+    form = SignUpForm(request.POST or None)
+    if not request.user.is_authenticated:
+        form.fields['password'].required = True
+        form.fields['password2'].required = True
 
     if 'save_changes_onprofile' in request.POST:
         # print(request.POST)
@@ -250,7 +264,7 @@ def profile(request):
 #
 #                 message = 'Kaydınız başarıyla oluşturuldu.'
 #                 messages.success(request, mark_safe(message))
-#                 return redirect('home')
+#                 return redirect('login')
 #
 #             messages.error(request, mark_safe(message))
 #
@@ -280,7 +294,7 @@ def ekip(request):
             del request.session['user_values']
             message = 'Kaydınız başarıyla oluşturuldu.'
             messages.success(request, mark_safe(message))
-            return redirect('home')
+            return redirect('login')
 
     # Save data of the user's when there is a change in form
     elif 'save_changes_on_company' in request.POST:
@@ -319,3 +333,4 @@ def ekip(request):
         'form': form,
     }
     return render(request, 'my_team.html', context=context)
+

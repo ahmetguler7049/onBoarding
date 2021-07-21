@@ -4255,8 +4255,8 @@ input[type="button"].btn-block {
   background-color: #e9ecef;
 }
 
-.custom-file-input:lang(en)~.custom-file-label::after {
-  content: "Browse";
+.custom-file-input:lang(tr)~.custom-file-label::after {
+  content: "Dosya Seç";
 }
 
 .custom-file-label {
@@ -4286,7 +4286,7 @@ input[type="button"].btn-block {
   padding: 0.625rem 0.75rem;
   line-height: 1.5;
   color: #8898aa;
-  content: "Browse";
+  content: "Dosya Seç";
   background-color: #fff;
   border-left: 1px solid #cad1d7;
   border-radius: 0 0.375rem 0.375rem 0;
@@ -19621,6 +19621,49 @@ html:not([dir="rtl"]) .noUi-horizontal .noUi-handle {
 
 .ct-example .custom-file-input:lang(es)~.custom-file-label::after {
   content: "Elegir";
+}
+
+.file {
+  opacity: 0;
+  width: 0.1px;
+  height: 0.1px;
+  position: absolute;
+}
+
+.file-input label {
+  display: block;
+  position: relative;
+  width: 200px;
+  height: 50px;
+  border-radius: 25px;
+  background: linear-gradient(40deg,#ff6ec4,#7873f5);
+  box-shadow: 0 4px 7px rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform .2s ease-out;
+}
+
+.file-name {
+  position: absolute;
+  top: 55px;
+  left: 25px;
+  font-size: 0.85rem;
+  font-weight: bold;
+  color: #555;
+}
+
+input:hover + label,
+input:focus + label {
+  transform: scale(1.02);
+}
+
+/* Adding an outline to the label on focus */
+input:focus + label {
+  outline: 1px solid #000 !important;
 }
 
 .ct-example>.form-control+.form-control {

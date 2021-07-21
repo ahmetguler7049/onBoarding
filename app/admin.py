@@ -15,13 +15,12 @@ from .models import *
 @admin.register(User)
 class UserAdmin(DjangoUserAdmin):
     """Define admin model for custom User model with no email field."""
-
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
         (_('Personal info'), {'fields': ('first_name', 'last_name')}),
         (_('Permissions'), {'fields': ('is_active', 'is_staff', 'is_superuser',
                                        'groups', 'user_permissions')}),
-        (_('Important dates'), {'fields': ('last_login', 'company', 'date_joined')}),
+        (_('Important dates'), {'fields': ('last_login', 'company', 'date_joined', 'firm', 'is_firm_manager')}),
     )
     add_fieldsets = (
         (None, {
@@ -45,3 +44,14 @@ class CompanyAdmin(admin.ModelAdmin):
     class Meta:
         model = Company
 
+
+@admin.register(Firm)
+class FirmAdmin(admin.ModelAdmin):
+
+    list_display = ['id', 'firm_name']
+    # list_editable = ['code', 'valid_from', 'valid_to', 'value', ]
+    search_fields = ['firm_name', ]
+    # list_filter = ['team_size', 'is_tech_exist', ]
+
+    class Meta:
+        model = Firm

@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 from pathlib import Path
 import os
 import django_heroku
-
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -23,8 +23,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '!bhfe6a9&e1(-7z-gw+3_px9f3#15+gq&1m)u@+i1+h^hp#46y'
-GOOGLE_RECAPTCHA_SECRET_KEY = '6Le4x5MaAAAAAGsrGKkq2OOc4nn4Tv5Jx8_7ewzA'
+SECRET_KEY = config('SECRET_KEY')
+GOOGLE_RECAPTCHA_SECRET_KEY = config('GOOGLE_RECAPTCHA_SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -55,6 +55,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
+
+    'onBoarding.SubdomainMiddleware.SubdomainMiddleware',  # Ekstra
 ]
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
@@ -139,11 +141,26 @@ USE_TZ = True
 
 AUTH_USER_MODEL = 'app.User'
 
+
+DEFAULT_SITE_DOMAIN = 'letsacademy.co'
+
+SESSION_COOKIE_DOMAIN = '.' + DEFAULT_SITE_DOMAIN
+CSRF_COOKIE_DOMAIN = SESSION_COOKIE_DOMAIN
+
+DOMAIN = SESSION_COOKIE_DOMAIN
+DOMAIN_NAME = SESSION_COOKIE_DOMAIN
+
+SESSION_COOKIE_NAME = SESSION_COOKIE_DOMAIN
+CSRF_COOKIE_NAME = SESSION_COOKIE_DOMAIN
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
 
 # Extra places for collectstatic to find static files.
 STATICFILES_DIRS = (
@@ -151,5 +168,5 @@ STATICFILES_DIRS = (
 )
 
 django_heroku.settings(locals())
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
