@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 from pathlib import Path
 import os
 import django_heroku
+import dj_database_url
 from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -22,11 +23,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
+env_file = os.path.join(BASE_DIR, ".env")
+ENV = False
+if os.path.isfile(env_file):
+    ENV = True
+
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = config('SECRET_KEY')
 GOOGLE_RECAPTCHA_SECRET_KEY = config('GOOGLE_RECAPTCHA_SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG', default=True, cast=bool)
 
 ALLOWED_HOSTS = ['ec2-54-162-119-125.compute-1.amazonaws.com', '127.0.0.1', 'localhost', '192.168.1.41', '1.1.1.1']
 
@@ -48,13 +54,14 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
 
     'onBoarding.SubdomainMiddleware.SubdomainMiddleware',  # Ekstra
 ]
@@ -90,21 +97,25 @@ WSGI_APPLICATION = 'onBoarding.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+if ENV:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
 
-        'NAME': 'onboarding2',
+            'NAME': config('DB_NAME'),
 
-        'USER': 'postgres',
+            'USER': config('DB_USER'),
 
-        'PASSWORD': 'hqy#pbpbLMC8cHg',
+            'PASSWORD': config('DB_PASSWORD'),
 
-        'HOST': 'localhost',
+            'HOST': 'localhost',
 
-        'PORT': '5432',
+            'PORT': '5432',
+        }
     }
-}
+else:
+    DATABASES = dict()
+    DATABASES['default'] = dj_database_url.config(conn_max_age=600)
 
 
 # Password validation
@@ -142,16 +153,19 @@ USE_TZ = True
 AUTH_USER_MODEL = 'app.User'
 
 
-DEFAULT_SITE_DOMAIN = 'letsacademy.co'
+if ENV:
+    DEFAULT_SITE_DOMAIN = 'localhost:8000'
+else:
+    DEFAULT_SITE_DOMAIN = 'letsacademy.co'
 
-SESSION_COOKIE_DOMAIN = '.' + DEFAULT_SITE_DOMAIN
-CSRF_COOKIE_DOMAIN = SESSION_COOKIE_DOMAIN
+    SESSION_COOKIE_DOMAIN = '.' + DEFAULT_SITE_DOMAIN
+    CSRF_COOKIE_DOMAIN = SESSION_COOKIE_DOMAIN
 
-DOMAIN = SESSION_COOKIE_DOMAIN
-DOMAIN_NAME = SESSION_COOKIE_DOMAIN
+    DOMAIN = SESSION_COOKIE_DOMAIN
+    DOMAIN_NAME = SESSION_COOKIE_DOMAIN
 
-SESSION_COOKIE_NAME = SESSION_COOKIE_DOMAIN
-CSRF_COOKIE_NAME = SESSION_COOKIE_DOMAIN
+    SESSION_COOKIE_NAME = SESSION_COOKIE_DOMAIN
+    CSRF_COOKIE_NAME = SESSION_COOKIE_DOMAIN
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
