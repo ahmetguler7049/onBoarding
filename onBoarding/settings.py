@@ -56,7 +56,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
 
-    # 'onBoarding.SubdomainMiddleware.SubdomainMiddleware',
+    'onBoarding.SubdomainMiddleware.SubdomainMiddleware',
     # 'onBoarding.SubdomainMiddleware.CrossDomainSessionMiddleware',
 
     'django.contrib.sessions.middleware.SessionMiddleware',
