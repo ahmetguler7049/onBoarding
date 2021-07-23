@@ -1,13 +1,8 @@
 from django.conf import settings
 from django.utils.deprecation import MiddlewareMixin
 from django.shortcuts import redirect, reverse
-
-
 import re
-
 from django.contrib.sites.shortcuts import get_current_site
-
-
 
 
 class SubdomainMiddleware(MiddlewareMixin):
