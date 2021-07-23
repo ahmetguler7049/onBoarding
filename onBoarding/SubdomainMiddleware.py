@@ -34,6 +34,13 @@ class SubdomainMiddleware(MiddlewareMixin):
         print("redirect_subdomain", redirect_subdomain)
         print("SESSION_COOKIE_NAME:", settings.SESSION_COOKIE_NAME)
         print("SESSION_COOKIE_DOMAIN:", settings.SESSION_COOKIE_DOMAIN)
+        for elem in request.session:
+            print('session', elem)
+        for elem in request.COOKIES:
+            print('cookie', elem)
+        print('is_authenticated', request.user.is_authenticated)
+
+
 
         # if redirect_subdomain and current_subdomain != redirect_subdomain:
         #     # print('1' * 40)
