@@ -34,7 +34,7 @@ class SubdomainMiddleware(MiddlewareMixin):
         print("redirect_subdomain", redirect_subdomain)
         print("SESSION_COOKIE_NAME:", settings.SESSION_COOKIE_NAME)
         print("SESSION_COOKIE_DOMAIN:", settings.SESSION_COOKIE_DOMAIN)
-        for elem in request.session:
+        for elem in request.session.items():
             print('session', elem)
         for elem in request.COOKIES:
             print('cookie', elem)
