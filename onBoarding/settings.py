@@ -34,7 +34,7 @@ GOOGLE_RECAPTCHA_SECRET_KEY = config('GOOGLE_RECAPTCHA_SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=True, cast=bool)
 
-ALLOWED_HOSTS = ['ec2-54-162-119-125.compute-1.amazonaws.com', '127.0.0.1', 'localhost', '192.168.1.41', '1.1.1.1']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
