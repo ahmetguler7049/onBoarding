@@ -31,17 +31,39 @@ class SubdomainMiddleware(MiddlewareMixin):
         else:
             first_part = 'http://'
 
-        if redirect_subdomain and current_subdomain != redirect_subdomain:
-            # print('1' * 40)
-            redirect_url = first_part + redirect_subdomain + '.' + settings.DEFAULT_SITE_DOMAIN + reverse(view_func) + parameters
-            return redirect(redirect_url)
+        print("redirect_subdomain", redirect_subdomain)
+        print("SESSION_COOKIE_NAME:", settings.SESSION_COOKIE_NAME)
+        print("SESSION_COOKIE_DOMAIN:", settings.SESSION_COOKIE_DOMAIN)
+
+        # if redirect_subdomain and current_subdomain != redirect_subdomain:
+        #     # print('1' * 40)
+        #     redirect_url = first_part + redirect_subdomain + '.' + settings.DEFAULT_SITE_DOMAIN + reverse(view_func) + parameters
+        #     return redirect(redirect_url)
         # elif not redirect_subdomain and current_subdomain != redirect_subdomain:
         #     print('2' * 40)
         #     redirect_url = first_part + settings.DEFAULT_SITE_DOMAIN + reverse(view_func) + parameters
         #     return redirect(redirect_url)
-        else:
-            # print('3' * 40)
-            return None
+        # else:
+        #     # print('3' * 40)
+        #     return None
+
+
+class CrossDomainSessionMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        response = self.get_response(request)
+        if response.cookies:
+            host = request.get_host()
+            # check if it's a different domain
+            if host not in settings.SESSION_COOKIE_DOMAIN:
+                domain = ".{domain}".format(domain=host)
+                print("domain:", domain)
+                for cookie in response.cookies:
+                    if 'domain' in response.cookies[cookie]:
+                        response.cookies[cookie]['domain'] = domain
+        return response
 
 # class SubdomainMiddleware(object):
 #     """Middleware class that redirects non "www" subdomain requests to a
