@@ -7,7 +7,7 @@
     <!-- Header -->
     {% if request.user.is_authenticated %}
         <div class="header pb-8 pt-5 pt-lg-8 d-flex align-items-center"
-             style="min-height: 400px; background-image: url(../static/assets/img/theme/profile-cover.jpg) ; background-size: cover; background-position: center top;">
+             style="min-height: 400px; background-image: url({% static 'assets/img/theme/profile-cover.jpg' %}) ; background-size: cover; background-position: center top;">
             <!-- Mask -->
             <span class="mask bg-gradient-default opacity-8"></span>
             <!-- Header container -->
@@ -24,7 +24,7 @@
     {% else %}
 
         <div class="header pb-8 pt-5 pt-lg-8 d-flex align-items-center"
-             style="min-height: 100px; background-image: url(../static/assets/img/theme/profile-cover.jpg) ; background-size: cover; background-position: center top;">
+             style="min-height: 100px; background-image: url({% static 'assets/img/theme/profile-cover.jpg' %}) ; background-size: cover; background-position: center top;">
             <!-- Mask -->
             <span class="mask bg-gradient-default opacity-8"></span>
             <!-- Header container -->
@@ -51,7 +51,7 @@
                     <div class="col-lg-3 order-lg-2">
                         <div class="card-profile-image">
                             <a href="#">
-                                <img src="../static/assets/img/theme/team-4-800x800.jpg" class="rounded-circle">
+                                <img src="{% static 'assets/img/theme/team-4-800x800.jpg' %}" class="rounded-circle">
                             </a>
                         </div>
                     </div>

@@ -48,7 +48,7 @@ class CompanyAdmin(admin.ModelAdmin):
 @admin.register(Firm)
 class FirmAdmin(admin.ModelAdmin):
 
-    list_display = ['id', 'firm_name']
+    list_display = ['id', 'firm_name', 'firm_domain']
     # list_editable = ['code', 'valid_from', 'valid_to', 'value', ]
     search_fields = ['firm_name', ]
     # list_filter = ['team_size', 'is_tech_exist', ]

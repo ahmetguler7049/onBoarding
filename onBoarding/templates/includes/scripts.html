@@ -1,24 +1,24 @@
+{% load static %}
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
 <script src="http://code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
-<script src="../../static/assets/js/plugins/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js" type="text/javascript"></script>
-
+<script src="{% static 'assets/js/plugins/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}" type="text/javascript"></script>
 
 
 <!--   Core   -->
-<!--  <script src="../../static/assets/js/plugins/jquery/dist/jquery.min.js"></script>-->
-<script src="../../static/assets/js/plugins/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" integrity="sha512-mf78KukU/a8rjr7aBRvCa2Vwg/q0tUjJhLtcK53PHEbFwCEqQ5durlzvVTgQgKpv+fyNMT6ZQT1Aq6tpNqf1mg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js" integrity="sha512-60KwWtZOhzgr840mc57MV8JqDZHAws3w61mhK45KsYHmhyNFJKmfg4M7/s2Jsn4PgtQ4Uhr9xItS+HCbGTIRYQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+{#<script src="{% static 'assets/js/plugins/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>#}
 <!--   Optional JS   -->
-<script src="../../static/assets/js/plugins/chart.js/dist/Chart.min.js"></script>
-<script src="../../static/assets/js/plugins/chart.js/dist/Chart.extension.js"></script>
+{#<script src="{% static 'assets/js/plugins/chart.js/dist/Chart.min.js' %}"></script>#}
+{#<script src="{% static 'assets/js/plugins/chart.js/dist/Chart.extension.js' %}"></script>#}
 
 <!--   G.Maps   -->
 <!--  <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>-->
 
 <!--   Argon JS   -->
-<script src="../../static/assets/js/argon-dashboard.min.js?v=1.1.0"></script>
-<!--  <script src="../../static/assets/js/plugins/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>-->
+<script src="{% static 'assets/js/argon-dashboard.min.js?v=1.1.0' %}"></script>
 <script>
     let len = 0;
     let maxchar = 450;
