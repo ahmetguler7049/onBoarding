@@ -31,7 +31,6 @@ class SubdomainMiddleware(MiddlewareMixin):
         else:
             http_protocol = 'http://'
 
-        print("protocol is equal:", http_protocol)
         if redirect_subdomain and current_subdomain != redirect_subdomain:
             redirect_url = http_protocol + redirect_subdomain + '.' + settings.DEFAULT_SITE_DOMAIN + reverse(view_func) + parameters
             return redirect(redirect_url)
