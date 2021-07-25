@@ -68,7 +68,6 @@ MIDDLEWARE = [
 
 ]
 
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 ROOT_URLCONF = 'onBoarding.urls'
 LOGIN_REDIRECT_URL = "home"   # Route defined in app/urls.py
@@ -184,7 +183,7 @@ STATICFILES_DIRS = (
 )
 
 django_heroku.settings(locals())
-# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 SECURE_SSL_REDIRECT = config('SECURE_SSL_REDIRECT', default=False, cast=bool)
 SESSION_COOKIE_SECURE = config('SESSION_COOKIE_SECURE', default=False, cast=bool)  # Cookieleri her zaman HTTPS kaydeder
