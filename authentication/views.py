@@ -68,9 +68,8 @@ def user_login_view(request):
                         if findUser.check_password(password):
                             user_login_check = authenticate(username=findUser, password=password)
                             login(request, user_login_check)
-                            print('xx')
-                            print(request.user.is_authenticated)
-                            return redirect("/")
+
+                            return redirect("home")
                         else:
                             messages.error(request, mark_safe('Geçersiz Şifre!'))
                 except User.DoesNotExist:
@@ -109,7 +108,7 @@ def admin_login_view(request):
                         if findUser.check_password(password):
                             user_login_check = authenticate(username=findUser, password=password)
                             login(request, user_login_check)
-                            return redirect("/")
+                            return redirect("home")
                         else:
                             messages.error(request, mark_safe('Geçersiz Şifre!'))
                 except User.DoesNotExist:
