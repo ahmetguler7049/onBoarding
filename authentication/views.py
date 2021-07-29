@@ -66,6 +66,7 @@ def user_login_view(request):
                     findUser = User._default_manager.get(email__iexact=email)
                     if findUser is not None:
                         if findUser.check_password(password):
+                            print("USER DETECTED!")
                             user_login_check = authenticate(email=email, password=password)
                             login(request, user_login_check)
 
