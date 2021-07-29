@@ -28,7 +28,7 @@ from openpyxl import *
 from django.utils.encoding import force_bytes, force_text, DjangoUnicodeDecodeError
 
 
-@login_required(redirect_field_name=)
+@login_required(login_url="/login/")
 def index(request):
     return render(request, "index.html")
 
