@@ -26,11 +26,13 @@ class SubdomainMiddleware(MiddlewareMixin):
                 if request.user.firm.firm_domain:
                     redirect_subdomain = request.user.firm.firm_domain
 
+        print("Is system secure:", request.is_secure)
         if request.is_secure():
             http_protocol = 'https://'
         else:
             http_protocol = 'http://'
-
+        print("redirect_subdomain:", redirect_subdomain)
+        print("current_subdomain:", current_subdomain)
         if redirect_subdomain and current_subdomain != redirect_subdomain:
             redirect_url = http_protocol + redirect_subdomain + '.' + settings.DEFAULT_SITE_DOMAIN + reverse(view_func) + parameters
             return redirect(redirect_url)
@@ -39,4 +41,3 @@ class SubdomainMiddleware(MiddlewareMixin):
             return redirect(redirect_url)
         else:
             return None
-
