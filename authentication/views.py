@@ -70,7 +70,7 @@ def user_login_view(request):
                             user_login_check = authenticate(email=email, password=password)
                             login(request, user_login_check)
 
-                            return redirect("/")
+                            return redirect("home")
                         else:
                             messages.error(request, mark_safe('Geçersiz Şifre!'))
                 except User.DoesNotExist:
@@ -134,7 +134,7 @@ def forget_password_view(request):
             user = authenticate(email=email, password=password)
             if user is not None:
                 login(request, user)
-                return redirect("/")
+                return redirect("home")
             else:
                 msg = 'Invalid credentials'
         else:
