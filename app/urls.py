@@ -9,7 +9,7 @@ urlpatterns = [
     path('şirket/', views.ekip, name='ekip'),
     # path('plan/', views.is_teamleader, name='is_teamleader')
     path('kullanıcılar/', views.Bulk_Add_Users, name='Bulk_Add_Users'),
-    path('profil/', views.profile, name='profile'),
+    path('profil/', views.edit_profile, name='profile'),
     path('activate/<uidb64>/<token>', views.complete_profile_view, name='complete_profile_view'),
     
 ]

@@ -141,7 +141,8 @@ def complete_profile_view(request, uidb64, token):
     return render(request, 'profile.html', context=context)
 
 
-def profile(request):
+@login_required(login_url="/login/")
+def edit_profile(request):
     form = SignUpForm(request.POST or None)
     if not request.user.is_authenticated:
         form.fields['password'].required = True

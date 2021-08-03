@@ -56,7 +56,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
 
-    'onBoarding.SubdomainMiddleware.SubdomainMiddleware',
+    # 'onBoarding.SubdomainMiddleware.SubdomainMiddleware',
 
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -155,6 +155,9 @@ AUTH_USER_MODEL = 'app.User'
 
 if ENV:
     DEFAULT_SITE_DOMAIN = 'localhost:8000'
+    DOMAIN_NAME = DEFAULT_SITE_DOMAIN
+    SESSION_COOKIE_DOMAIN = '.' + DEFAULT_SITE_DOMAIN
+
 else:
     DEFAULT_SITE_DOMAIN = 'letsacademy.co'
 
