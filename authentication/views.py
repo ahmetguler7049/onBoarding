@@ -1,11 +1,7 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse
-from django.contrib.auth import authenticate, login, logout
-# from django.contrib.auth.models import User
-from django.core.exceptions import *
-from django.forms.utils import ErrorList
-from .forms import LoginForm, ForgetForm
-import os
+from django.contrib.auth import authenticate, login
+from .forms import LoginForm, ForgetForm, ResetPasswordForm
 
 from app.models import *
 
@@ -20,12 +16,11 @@ from django.conf import settings
 
 from django.contrib.auth.decorators import login_required
 from .tokens import account_activation_token
-from decouple import config
 from sendgrid.helpers.mail import Mail
 from sendgrid import SendGridAPIClient
 from django.contrib.sites.shortcuts import get_current_site
 from openpyxl import *
-from django.utils.encoding import force_bytes, force_text, DjangoUnicodeDecodeError
+from django.utils.encoding import force_bytes, force_text
 
 
 @login_required(login_url="/login/")
@@ -66,7 +61,6 @@ def user_login_view(request):
                     findUser = User._default_manager.get(email__iexact=email)
                     if findUser is not None:
                         if findUser.check_password(password):
-                            print("USER DETECTED!")
                             user_login_check = authenticate(email=email, password=password)
                             login(request, user_login_check)
 
@@ -124,46 +118,74 @@ def admin_login_view(request):
 
 def forget_password_view(request):
     form = ForgetForm(request.POST or None)
-    msg = None
 
     if request.method == "POST":
 
         if form.is_valid():
             email = form.cleaned_data.get("email")
-            password = form.cleaned_data.get("password")
-            user = authenticate(email=email, password=password)
-            if user is not None:
-                login(request, user)
-                return redirect("home")
-            else:
-                msg = 'Invalid credentials'
-        else:
-            msg = 'Error validating the form'
+            user = User.objects.get(email__iexact=email)
 
-    return render(request, "accounts/forget_password.html", {"form": form, "msg": msg})
+            domain = get_current_site(request).domain
+            email_body = {
+                'domain': domain,
+                'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+                'token': account_activation_token.make_token(user),
+            }
+
+            link = reverse('reset_password', kwargs={
+                'uidb64': email_body['uid'], 'token': email_body['token']})
+            activate_url = 'http://' + domain + link
+
+            message = Mail(
+                from_email='accelerator@university4society.com',
+                to_emails=email,
+                subject='LETS Academy Yeni Parolanı Belirle!',
+                html_content='Merhaba,\n'
+                             'LETS Academy üzerinden şifre değişikliği talebin alındı. {} adresine gidip yeni şifreni '
+                             'oluşturabilirsin.'.format(activate_url)
+            )
+
+            try:
+                sg = SendGridAPIClient('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')
+                response = sg.send(message)
+                # print(response.status_code)
+                # print(response.body)
+                # print(response.headers)
+            except Exception as e:
+                print(e.message)
+
+            messages.success(request, mark_safe("Şifre yenileme e-postasını gönderdik. E-postanı kontrol etmeyi unutma!"))
+            return redirect("forget_password")
+    return render(request, "accounts/forget_password.html", {"form": form})
 
 
-# def reset_password_view(request):
-#
-#     form = ResetPasswordForm(request.POST or None)
-#     msg = None
-#
-#     if request.method == "POST":
-#
-#         if form.is_valid():
-#             email = request.POST['email']
-#             password = request.POST['password']
-#             username = get_user(email)
-#             user = authenticate(username=username, password=password)
-#             if user is not None:
-#                 login(request, user)
-#                 return redirect("/")
-#             else:
-#                 msg = 'Invalid credentials'
-#         else:
-#             msg = 'Error validating the form'
-#
-#     return render(request, "accounts/reset-password.html", {"form": form, "msg" : msg})
+def reset_password_view(request, uidb64, token):
+
+    form = ResetPasswordForm(request.POST or None)
+    user_id = force_text(urlsafe_base64_decode(uidb64))
+    user = User.objects.get(pk=user_id)
+    msg = None
+
+    if request.method == "POST":
+        if form.is_valid():
+            password = form.cleaned_data.get('password')
+            password_check = form.cleaned_data.get('password_check')
+
+            if password != password_check:
+                msg = "Şifreler eşleşmiyor!"
+                messages.error(request, mark_safe(msg))
+
+            elif password == password_check and len(password) < 6:
+                msg = "Şifreniz çok kısa!"
+                messages.error(request, mark_safe(msg))
+
+            elif account_activation_token.check_token(user, token):
+                user.set_password(raw_password=password)
+                user.save()
+                msg = 'Şifreniz başarıyla değiştirildi, yeni şifrenizi kullanabilirsiniz.'
+                messages.success(request, mark_safe(msg))
+                return redirect('login')
+    return render(request, "accounts/reset-password.html", {"form": form, "msg": msg})
 
 
 # def register_user(request):
@@ -227,9 +249,9 @@ def Bulk_Add_Users(request):
                 try:
                     sg = SendGridAPIClient('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')
                     response = sg.send(message)
-                    print(response.status_code)
-                    print(response.body)
-                    print(response.headers)
+                    # print(response.status_code)
+                    # print(response.body)
+                    # print(response.headers)
                 except Exception as e:
                     print(e.message)
             else:
