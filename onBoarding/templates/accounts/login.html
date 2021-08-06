@@ -1,5 +1,5 @@
 {% extends 'layouts/base-fullscreen.html' %}
-
+{% load static %}
 {% block title %} Login {% endblock title %}
 
 <!-- Specific CSS goes HERE -->
@@ -59,14 +59,14 @@
 
                 <div style="margin-top: 5%" class="g-recaptcha" data-sitekey="6Le4x5MaAAAAAFcJfQYv5toU2Is38BH7G6bNq7-T"></div>
                 <div class="text-center">
-                  <button type="submit" class="btn btn-primary my-4">Giriş Yap</button>
+                  <button name="user_login" type="submit" class="btn btn-primary my-4">Giriş Yap</button>
                 </div>
               </form>
             </div>
           </div>
           <div class="row mt-3">
             <div class="col-6">
-              <a href="{% url 'admin_login' %}" class="text-light"><small>Yönetici Girişi</small></a>
+              <a href="{% url 'admin_login_view' %}" class="text-light"><small>Yönetici Girişi</small></a>
             </div>
             <div class="col-6 text-right">
               <a href="{% url 'forget_password' %}" class="text-light"><small>Şifremi Unuttum</small></a>

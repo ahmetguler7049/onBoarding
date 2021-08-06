@@ -23,11 +23,6 @@ from openpyxl import *
 from django.utils.encoding import force_bytes, force_text
 
 
-@login_required(login_url="/login/")
-def index(request):
-    return render(request, "index.html")
-
-
 def recaptcha_kontrol(request):
     recaptcha_response = request.POST.get('g-recaptcha-response')
     url = 'https://www.google.com/recaptcha/api/siteverify'
@@ -42,13 +37,18 @@ def recaptcha_kontrol(request):
     return result
 
 
+@login_required(login_url='user_login_view')
+def index(request):
+    return render(request, "index.html")
+
+
 def user_login_view(request):
     form = LoginForm(request.POST or None)
     context = {
         'form': form,
     }
 
-    if request.method == "POST":
+    if "user_login" in request.POST:
 
         if form.is_valid():
             result = recaptcha_kontrol(request)
@@ -205,7 +205,7 @@ def reset_password_view(request, uidb64, token):
 #     return render(request, "accounts/register.html", {"form": form, "msg": msg})
 
 
-@login_required(login_url='/login/')
+@login_required
 def Bulk_Add_Users(request):
     if 'bulk_users' in request.POST:
         excel_file = request.FILES.get('excel_file', False)

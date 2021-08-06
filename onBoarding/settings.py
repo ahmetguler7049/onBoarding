@@ -70,7 +70,9 @@ MIDDLEWARE = [
 
 
 ROOT_URLCONF = 'onBoarding.urls'
-LOGOUT_REDIRECT_URL = "home"  # Route defined in app/urls.py
+LOGIN_URL = "login"
+LOGIN_REDIRECT_URL = "home"
+LOGOUT_REDIRECT_URL = "login"  # Route defined in app/urls.py
 TEMPLATE_DIR = os.path.join(BASE_DIR, "onBoarding/templates")  # ROOT dir for templates
 
 TEMPLATES = [
@@ -154,7 +156,7 @@ AUTH_USER_MODEL = 'app.User'
 
 
 if ENV:
-    DEFAULT_SITE_DOMAIN = 'localhost:8000'
+    DEFAULT_SITE_DOMAIN = 'localhost:8000/'
     DOMAIN_NAME = DEFAULT_SITE_DOMAIN
     SESSION_COOKIE_DOMAIN = '.' + DEFAULT_SITE_DOMAIN
 
@@ -190,10 +192,12 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 SECURE_SSL_REDIRECT = config('SECURE_SSL_REDIRECT', default=False, cast=bool)
 SESSION_COOKIE_SECURE = config('SESSION_COOKIE_SECURE', default=False, cast=bool)  # Cookieleri her zaman HTTPS kaydeder
 CSRF_COOKIE_SECURE = config('CSRF_COOKIE_SECURE', default=False, cast=bool)  # Cookieleri her zaman HTTPS kaydeder
+SESSION_COOKIE_SAMESITE = None
 
-if SECURE_SSL_REDIRECT:  # force HTTP to HTTPS
-    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-    os.environ['HTTPS'] = "on"
-    os.environ['wsgi.url_scheme'] = 'https'
+if not ENV:
+    if SECURE_SSL_REDIRECT:  # force HTTP to HTTPS
+        SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+        os.environ['HTTPS'] = "on"
+        os.environ['wsgi.url_scheme'] = 'https'
 
-    del DATABASES['default']['OPTIONS']['sslmode']
+        del DATABASES['default']['OPTIONS']['sslmode']
