@@ -34,6 +34,7 @@ class SubdomainMiddleware(MiddlewareMixin):
                 http_protocol = 'https://'
             else:
                 http_protocol = 'http://'
+            http_protocol = 'https://'
             print("redirect_subdomain:", redirect_subdomain)
             print("current_subdomain:", current_subdomain)
             if redirect_subdomain and (current_subdomain != redirect_subdomain):
