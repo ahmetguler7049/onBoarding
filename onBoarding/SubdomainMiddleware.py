@@ -23,28 +23,25 @@ class SubdomainMiddleware(MiddlewareMixin):
 
             redirect_subdomain = None
             if request.user.is_authenticated:
-                print("USER IS AUTHENTICATED")
                 if request.user.firm:
-                    print("USER HAS GOT A FIRM")
                     if request.user.firm.firm_domain:
-                        print("USER HAS GOT A FIRM_DOMAIN")
                         redirect_subdomain = request.user.firm.firm_domain
 
-            if request.is_secure():
-                http_protocol = 'https://'
-            else:
-                http_protocol = 'http://'
+            # if request.is_secure():
+            #     http_protocol = 'https://'
+            # else:
+            #     http_protocol = 'http://'
             http_protocol = 'https://'
-            print("redirect_subdomain:", redirect_subdomain)
-            print("current_subdomain:", current_subdomain)
+            # print("redirect_subdomain:", redirect_subdomain)
+            # print("current_subdomain:", current_subdomain)
             if redirect_subdomain and (current_subdomain != redirect_subdomain):
                 redirect_url = http_protocol + redirect_subdomain + '.' + settings.DEFAULT_SITE_DOMAIN + reverse(view_func) + parameters
                 print(redirect_url)
-                return redirect(redirect_url)
+                # return redirect(redirect_url)
             elif not redirect_subdomain and (current_subdomain != redirect_subdomain):
                 redirect_url = http_protocol + settings.DEFAULT_SITE_DOMAIN + reverse(view_func) + parameters
-                print(redirect_url)
+                # print(redirect_url)
                 return redirect(redirect_url)
             else:
-                print("NOTHING HAPPENED!")
+                # print("NOTHING HAPPENED!")
                 return None
