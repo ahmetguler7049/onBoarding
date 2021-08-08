@@ -56,7 +56,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
 
-    # 'onBoarding.SubdomainMiddleware.SubdomainMiddleware',
+    'onBoarding.SubdomainMiddleware.SubdomainMiddleware',
 
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -70,9 +70,7 @@ MIDDLEWARE = [
 
 
 ROOT_URLCONF = 'onBoarding.urls'
-LOGIN_URL = "user_login_view"
-LOGIN_REDIRECT_URL = "home"
-LOGOUT_REDIRECT_URL = "user_login_view"  # Route defined in app/urls.py
+LOGOUT_REDIRECT_URL = "home"  # Route defined in app/urls.py
 TEMPLATE_DIR = os.path.join(BASE_DIR, "onBoarding/templates")  # ROOT dir for templates
 
 TEMPLATES = [
@@ -156,10 +154,11 @@ AUTH_USER_MODEL = 'app.User'
 
 
 if ENV:
-    DEFAULT_SITE_DOMAIN = 'localhost:8000/'
-    DOMAIN_NAME = DEFAULT_SITE_DOMAIN
-    SESSION_COOKIE_DOMAIN = '.' + DEFAULT_SITE_DOMAIN
-
+    # DEFAULT_SITE_DOMAIN = 'localhost:8000'
+    # DEFAULT_SITE_DOMAIN = 'localhost'
+    # DOMAIN_NAME = DEFAULT_SITE_DOMAIN
+    # SESSION_COOKIE_DOMAIN = '.' + DEFAULT_SITE_DOMAIN
+    pass
 else:
     DEFAULT_SITE_DOMAIN = 'letsacademy.co'
 

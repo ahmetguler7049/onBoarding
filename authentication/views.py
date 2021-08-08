@@ -37,7 +37,7 @@ def recaptcha_kontrol(request):
     return result
 
 
-@login_required(login_url='user_login_view')
+@login_required(login_url="user_login_view")
 def index(request):
     return render(request, "index.html")
 
@@ -63,7 +63,6 @@ def user_login_view(request):
                         if findUser.check_password(password):
                             user_login_check = authenticate(email=email, password=password)
                             login(request, user_login_check)
-
                             return redirect("home")
                         else:
                             messages.error(request, mark_safe('Geçersiz Şifre!'))
