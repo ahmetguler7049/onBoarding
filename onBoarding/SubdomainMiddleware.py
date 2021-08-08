@@ -16,6 +16,7 @@ class SubdomainMiddleware(MiddlewareMixin):
             current_site = get_current_site(request)
             domain = current_site.domain
             pieces = domain.split('.')
+            print('pieces', pieces)
             if settings.DEFAULT_SITE_DOMAIN != pieces[0]:
                 current_subdomain = pieces[0]
             else:
