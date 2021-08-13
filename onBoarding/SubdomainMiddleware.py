@@ -37,7 +37,7 @@ class SubdomainMiddleware(MiddlewareMixin):
             if redirect_subdomain and (current_subdomain != redirect_subdomain):
                 redirect_url = http_protocol + redirect_subdomain + '.' + settings.DEFAULT_SITE_DOMAIN + reverse(view_func) + parameters
                 print(redirect_url)
-                # return redirect(redirect_url)
+                return redirect(redirect_url)
             elif not redirect_subdomain and (current_subdomain != redirect_subdomain):
                 redirect_url = http_protocol + settings.DEFAULT_SITE_DOMAIN + reverse(view_func) + parameters
                 # print(redirect_url)
