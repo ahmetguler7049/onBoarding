@@ -38,7 +38,7 @@ def complete_profile_view(request, uidb64, token):
     if user.is_profile_completed:
         message = 'Hesabınız zaten aktive edilmiş.'
         messages.warning(request, mark_safe(message))
-        return redirect('login')
+        return redirect('user_login_view')
 
     if not request.user.is_authenticated:
         form.fields['password'].required = True
@@ -129,7 +129,7 @@ def complete_profile_view(request, uidb64, token):
                 del request.session['user_values']
                 message = 'Kaydınız başarıyla oluşturuldu.'
                 messages.success(request, mark_safe(message))
-                return redirect('login')
+                return redirect('user_login_view')
             else:
                 messages.error(request, mark_safe(message))
 
@@ -295,7 +295,7 @@ def ekip(request):
             del request.session['user_values']
             message = 'Kaydınız başarıyla oluşturuldu.'
             messages.success(request, mark_safe(message))
-            return redirect('login')
+            return redirect('user_login_view')
 
     # Save data of the user's when there is a change in form
     elif 'save_changes_on_company' in request.POST:

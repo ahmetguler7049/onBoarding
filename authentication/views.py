@@ -183,7 +183,7 @@ def reset_password_view(request, uidb64, token):
                 user.save()
                 msg = 'Şifreniz başarıyla değiştirildi, yeni şifrenizi kullanabilirsiniz.'
                 messages.success(request, mark_safe(msg))
-                return redirect('login')
+                return redirect('user_login_view')
     return render(request, "accounts/reset-password.html", {"form": form, "msg": msg})
 
 
