@@ -335,3 +335,7 @@ def ekip(request):
     }
     return render(request, 'my_team.html', context=context)
 
+
+@login_required(login_url="/login/")
+def curriculum(request):
+    return render(request, "curriculum.html")

@@ -64,8 +64,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-
-
 ]
 
 
@@ -201,3 +199,5 @@ if not ENV:
         os.environ['wsgi.url_scheme'] = 'https'
 
         del DATABASES['default']['OPTIONS']['sslmode']
+
+

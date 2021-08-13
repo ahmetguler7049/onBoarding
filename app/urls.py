@@ -10,6 +10,7 @@ urlpatterns = [
     # path('plan/', views.is_teamleader, name='is_teamleader')
     path('kullanıcılar/', views.Bulk_Add_Users, name='Bulk_Add_Users'),
     path('profil/', views.edit_profile, name='profile'),
+    path('curriculum/', views.curriculum, name='curriculum'),
     path('activate/<uidb64>/<token>', views.complete_profile_view, name='complete_profile_view'),
 ]
 

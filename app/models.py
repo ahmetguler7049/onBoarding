@@ -8,7 +8,6 @@ from django.utils import timezone
 
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
 
 
 class UserManager(BaseUserManager):
@@ -1111,6 +1110,19 @@ class User(AbstractUser):
     objects = UserManager()
 
     pass
+
+
+class Batch:
+    batch_name = models.CharField(max_length=250, verbose_name="Batch Adı", blank=False, null=False)
+
+
+class Module:
+    module_name = models.CharField(max_length=250, verbose_name="Modül Adı", blank=False, null=False)
+
+
+class Content:
+    content_type = models.CharField(max_length=250, verbose_name="İçerik Tipi", blank=False, null=False)
+
 
 # User._meta.get_field('username')._unique = False
 # User._meta.get_field('username').blank = True
