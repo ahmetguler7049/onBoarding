@@ -4936,6 +4936,11 @@ input[type="button"].btn-block {
   color: rgba(255, 255, 255, 0.65);
 }
 
+a.card,
+a.card:hover {
+  color: inherit;
+}
+
 .card {
   position: relative;
   display: flex;
@@ -20728,7 +20733,91 @@ pre>code.highlight {
   margin-left: 1rem;
 }
 
+.progress2{
+    width: 70px;
+    height: 70px;
+    line-height: 70px;
+    background: none;
+    margin: 0 auto;
+    box-shadow: none;
+    position: relative;
+}
+.progress2:after{
+    content: "";
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+.progress2 > span{
+    width: 50%;
+    height: 100%;
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    z-index: 1;
+}
+.progress2 .progress-left{
+    left: 0;
+}
+.progress2 .progress-bar{
+    width: 100%;
+    height: 100%;
+    background: none;
+    border-width: 2px;
+    border-style: solid;
+    position: absolute;
+    top: 0;
+}
+.progress2 .progress-left .progress-bar{
+    left: 100%;
+    border-top-right-radius: 80px;
+    border-bottom-right-radius: 80px;
+    border-left: 0;
+    -webkit-transform-origin: center left;
+    transform-origin: center left;
+}
+.progress2 .progress-right{
+    right: 0;
+}
+.progress2 .progress-right .progress-bar{
+    left: -100%;
+    border-top-left-radius: 80px;
+    border-bottom-left-radius: 80px;
+    border-right: 0;
+    -webkit-transform-origin: center right;
+    transform-origin: center right;
+    animation: loading-1 1.8s linear forwards;
+}
+.progress2 .progress-value{
+    width: 85%;
+    height: 85%;
+    border-radius: 50%;
+    border: 2px solid #ebebeb;
+    font-size: 22px;
+    line-height: 55px;
+    text-align: center;
+    position: absolute;
+    top: 7.5%;
+    left: 7.5%;
+}
+.progress2.green .progress-value{
+    color: #1abc9c;
+}
 
 
+.drop-caps:first-letter{
+  color: #11cdef;
+  padding: 0 .3rem;
+  margin: 0 .3rem 0 0;
+  border: 2px solid;
+  border-radius: 8px;
+  font-family: "IBM Plex Mono", sans-serif;
+  font-size: 3rem;
+  line-height: 0.7;
+}
 
 /*# sourceMappingURL=dashboard-free.css.map */

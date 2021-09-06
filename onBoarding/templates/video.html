@@ -1,0 +1,55 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+{% block title %} Profile {% endblock title %}
+
+{% block content %}
+    <div class="header pb-8 pt-lg-8 d-flex align-items-center"
+         style="max-height: 300px; background-image: url({% static 'assets/img/theme/profile-cover.jpg' %}) ; background-size: cover; background-position: center top;">
+        <!-- Mask -->
+        <span class="mask bg-gradient-default opacity-8"></span>
+        <!-- Header container -->
+        <div class="container-fluid d-flex align-items-center">
+            <div class="row">
+                <div class="col-lg-7 col-md-10">
+                    <h1 class="display-4 text-white right">Example Article</h1>
+                    <p class="text-white mt-0 mb-5">Article Description</p>
+                    <!--            <a href="#!" class="btn btn-info">Edit profile</a>-->
+                </div>
+            </div>
+        </div>
+    </div>
+    <body>
+    <!-- Page content-->
+    <div class="container mt-5">
+        <div class="row">
+            <header class="mb-4 row">
+                <!-- Post meta content-->
+                <div class="text-info fst-italic mb-2">Oluşturma Tarihi: ../../....</div>
+            </header>
+            <div class="row">
+                <div class="col-xl-10 center">
+                    <!-- Post content-->
+                    <article>
+                        <!-- Post header-->
+
+                        <!-- Preview image figure-->
+                        <div class="embed-responsive embed-responsive-16by9">
+                            <iframe width="560" height="315" src="https://www.youtube.com/embed/khs_kfdHiKQ?controls=0" title="YouTube video player" frameborder="0" allow="" allowfullscreen></iframe>
+                        </div>
+                        <!-- Post content-->
+                        <div class="mb-5 mt-4">
+                            <p class="fs-5 mb-4 drop-caps">Science is an enterprise that should be cherished as an activity of the free human mind. Because it transforms who we are, how we live, and it gives us an understanding of our place in the universe. The universe is large and old, and the ingredients for life as we know it are everywhere, so there's no reason to think that Earth would be unique in that regard. Whether of not the life became intelligent is a different question, and we'll see if we find that. If you get asteroids about a kilometer in size, those are large enough and carry enough energy into our system to disrupt transportation, communication, the food chains, and that can be a really bad day on Earth. For me, the most fascinating interface is Twitter. I have odd cosmic thoughts every day and I realized I could hold them to myself or share them with people who might be interested. Venus has a runaway greenhouse effect. I kind of want to know what happened there because we're twirling knobs here on Earth without knowing the consequences of it. Mars once had running water. It's bone dry today. Something bad happened there as well.</p>
+                        </div>
+                    </article>
+                    <!-- Comments section-->
+                </div>
+            </div>
+        </div>
+        {% include "includes/footer.html" %}
+    </div>
+    </body>
+
+{% endblock content %}
+
+<!-- Specific JS goes HERE -->
+{% block javascripts %}{% endblock javascripts %}

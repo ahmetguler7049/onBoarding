@@ -338,4 +338,19 @@ def ekip(request):
 
 @login_required(login_url="/login/")
 def curriculum(request):
-    return render(request, "curriculum.html")
+    return render(request, "curriculum.html")\
+
+
+@login_required(login_url="/login/")
+def article_view(request):
+    return render(request, "article.html")
+
+
+@login_required(login_url="/login/")
+def video_view(request):
+    return render(request, "video.html")
+
+
+@login_required(login_url="/login/")
+def anket_view(request):
+    return render(request, "anket.html")

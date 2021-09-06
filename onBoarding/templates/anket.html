@@ -1,0 +1,97 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+{% block title %} Profile {% endblock title %}
+
+{% block content %}
+
+    <!-- Header -->
+    <div class="header pb-8 pt-lg-8 d-flex align-items-center"
+             style="max-height: 300px; background-image: url({% static 'assets/img/theme/profile-cover.jpg' %}) ; background-size: cover; background-position: center top;">
+            <!-- Mask -->
+            <span class="mask bg-gradient-default opacity-8"></span>
+            <!-- Header container -->
+            <div class="container-fluid align-items-center">
+                <div class="row">
+                    <div class="col-lg-7 col-md-10">
+                        <p class="text-white mt-0 mb-5">Anket Notu veya Açıklama:</p>
+                        <!--            <a href="#!" class="btn btn-info">Edit profile</a>-->
+                    </div>
+                </div>
+            </div>
+    </div>
+
+    <div class="container-fluid mt--5">
+        <div class="row">
+            <div class="col-xl-10 center">
+                <div class="card bg-secondary shadow">
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="card-header bg-white border-0 text-center">
+                            <h2 class="mb-0">Anket Başlığı</h2>
+                        </div>
+                        <div class="col-lg-6 center">
+                            {% if messages %}
+                                {% for message in messages %}
+                                    {% if message.tags == 'error' %}
+                                        <div class="alert alert-danger" style="text-align: center">{{ message }}</div>
+                                    {% elif message.tags == 'success' %}
+                                        <div class="alert alert-success" style="text-align: center">{{ message }}</div>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                        <div class="card-body">
+                            <div class="pl-lg-4">
+                                <div class="description">
+                                    <h4>Question bla bla selamlar merhaba?</h4>
+                                    <br>
+                                </div>
+                                <div class="custom-control custom-radio mb-1">
+                                    <input type="radio" id="customRadio1" name="customRadio" class="custom-control-input">
+                                    <label class="custom-control-label" for="customRadio1">Seçenek 1</label>
+                                </div>
+                                <div class="custom-control custom-radio mb-1">
+                                    <input type="radio" id="customRadio2" name="customRadio" class="custom-control-input">
+                                    <label class="custom-control-label" for="customRadio2">Seçenek 2</label>
+                                </div>
+                                <div class="custom-control custom-radio mb-1">
+                                    <input type="radio" id="customRadio3" name="customRadio" class="custom-control-input">
+                                    <label class="custom-control-label" for="customRadio3">Seçenek 3</label>
+                                </div>
+                                <div class="custom-control custom-radio mb-1">
+                                    <input type="radio" id="customRadio4" name="customRadio" class="custom-control-input">
+                                    <label class="custom-control-label" for="customRadio4">Seçenek 4</label>
+                                </div>
+                            </div>
+                            <hr class="my-4" />
+                            <!-- Address -->
+                            <div class="pl-lg-4">
+                                <label for="exampleFormControlSelect1">Seç</label>
+                                <select class="form-control" id="exampleFormControlSelect1">
+                                    <option>Seçenek 1</option>
+                                    <option>Seçenek 2</option>
+                                    <option>Seçenek 3</option>
+                                    <option>Seçenek 4</option>
+                                    <option>Seçenek 5</option>
+                                </select>
+                            </div>
+                            <hr class="my-4" />
+                            <!-- Description -->
+                            <div class="pl-lg-4">
+                                <div class="form-group">
+                                    <label for="exampleFormControlTextarea1">Text Area</label>
+                                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="4"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% include "includes/footer.html" %}
+    </div>
+
+{% endblock content %}
+
+<!-- Specific JS goes HERE -->
+{% block javascripts %}{% endblock javascripts %}

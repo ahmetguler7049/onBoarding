@@ -1104,7 +1104,7 @@ class User(AbstractUser):
     bio = models.CharField(default='', max_length=999, verbose_name="Hakkımda", blank=True, null=False)
     is_profile_completed = models.BooleanField(default=False)
     is_teamleader = models.BooleanField(default=False, verbose_name="Ekip Lideri", blank=True, null=True)
-    company = models.ForeignKey(Company, on_delete=models.CASCADE, null=True)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, null=True, blank=True)
     firm = models.ForeignKey(Firm, on_delete=models.CASCADE, null=True)
     is_firm_manager = models.BooleanField(default=False, verbose_name="Firma Yöneticisi", blank=True, null=True)
     objects = UserManager()
