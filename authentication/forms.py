@@ -151,7 +151,7 @@ class SignUpForm(forms.Form):
         ),
     )
     # User._meta.get_field('universite').help_text
-    sinif = forms.ChoiceField(
+    sınıf = forms.ChoiceField(
         required=True,
         disabled=False,
         choices=Siniflar,
