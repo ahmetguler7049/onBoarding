@@ -1105,7 +1105,7 @@ class User(AbstractUser):
     dogum_gunu = models.DateTimeField(default=timezone.datetime.now, verbose_name="Doğum Günü", blank=False, null=False)
     cinsiyet = models.CharField(default=Cinsiyetler[0][0], max_length=250, choices=Cinsiyetler, verbose_name="Cinsiyet", blank=False, null=False)
     universite = models.CharField(default=universiteler[0][0], max_length=250, choices=universiteler, verbose_name="Üniversite", blank=False, null=False)
-    sınıf = models.CharField(default=Siniflar[0][0], max_length=250, choices=Siniflar, verbose_name="Sınıf", blank=False, null=False)
+    sinif = models.CharField(default=Siniflar[0][0], max_length=250, choices=Siniflar, verbose_name="Sınıf", blank=False, null=False)
     bolum = models.CharField(default=bolumler[0][0], max_length=250, choices=bolumler, verbose_name="Bölüm", blank=False, null=False)
     telefon = models.CharField(default='', max_length=11, verbose_name="Telefon", blank=False, null=False)
     linkedin_url = models.URLField(default='', max_length=250, verbose_name="Linkedin URL", blank=True, null=False)
