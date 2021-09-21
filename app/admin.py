@@ -55,3 +55,11 @@ class FirmAdmin(admin.ModelAdmin):
 
     class Meta:
         model = Firm
+
+
+admin.site.register(Article)
+admin.site.register(Video)
+admin.site.register(Survey)
+admin.site.register(Content)
+admin.site.register(Module)
+admin.site.register(Batch)

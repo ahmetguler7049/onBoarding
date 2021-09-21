@@ -26,8 +26,9 @@
                 <div class="card bg-secondary shadow">
                     <form method="POST">
                         {% csrf_token %}
-                        <div class="card-header bg-white border-0 text-center">
-                            <h2 class="mb-0">Anket Başlığı</h2>
+                        <div class="card-header bg-white border-0">
+                            <div class="text-info text-right fst-italic mb-2">Oluşturma Tarihi: ../../....</div>
+                            <h2 class="mb-0 text-center">Anket Başlığı</h2>
                         </div>
                         <div class="col-lg-6 center">
                             {% if messages %}

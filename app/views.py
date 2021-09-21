@@ -55,7 +55,7 @@ def complete_profile_view(request, uidb64, token):
             dogum_gunu = form.cleaned_data.get("dogum_gunu")
             cinsiyet = form.cleaned_data.get("cinsiyet")
             universite = form.cleaned_data.get("universite")
-            sınıf = form.cleaned_data.get("sınıf")
+            sinif = form.cleaned_data.get("sinif")
             bolum = form.cleaned_data.get("bolum")
             company_name = form.cleaned_data.get("company_name")
             team_leader_checkbox = request.POST.get("team_leader_checkbox")
@@ -82,7 +82,7 @@ def complete_profile_view(request, uidb64, token):
                 'dogum_gunu': str(dogum_gunu),
                 'cinsiyet': cinsiyet,
                 'universite': universite,
-                'sınıf': sınıf,
+                'sinif': sinif,
                 'bolum': bolum,
                 'company_name': company_name,
                 'team_leader_checkbox': team_leader_checkbox,
@@ -112,7 +112,7 @@ def complete_profile_view(request, uidb64, token):
                     user.dogum_gunu = user_values['dogum_gunu']
                     user.cinsiyet = user_values['cinsiyet']
                     user.universite = user_values['universite']
-                    user.sınıf = user_values['sınıf']
+                    user.sinif = user_values['sinif']
                     user.bolum = user_values['bolum']
                     user.telefon = user_values['telefon']
                     user.linkedin_url = user_values['linkedin_url']
@@ -160,7 +160,7 @@ def edit_profile(request):
             dogum_gunu = form.cleaned_data.get("dogum_gunu")
             cinsiyet = form.cleaned_data.get("cinsiyet")
             universite = form.cleaned_data.get("universite")
-            sınıf = form.cleaned_data.get("sınıf")
+            sinif = form.cleaned_data.get("sinif")
             bolum = form.cleaned_data.get("bolum")
             company_name = form.cleaned_data.get("company_name")
 
@@ -201,7 +201,7 @@ def edit_profile(request):
             user.dogum_gunu = dogum_gunu
             user.cinsiyet = cinsiyet
             user.universite = universite
-            user.sınıf = sınıf
+            user.sinif = sinif
             user.bolum = bolum
             user.is_teamleader = team_leader_checkbox
             user.telefon = telefon

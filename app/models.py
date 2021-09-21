@@ -130,9 +130,11 @@ Cities = [
 
 Cinsiyetler = [('Erkek', 'Erkek'), ('Kadın', 'Kadın')]
 
+ContentTypes = [('Text', 'Text'), ('Video', 'Video'), ('Anket', 'Anket')]
+
 Is_Tech_Exist = [('Var', 'Var'), ('Yok', 'Yok')]
 
-Sınıflar = [
+Siniflar = [
     ('Mezun', 'Mezun'),
     ('Hazırlık', 'Hazırlık'),
     ('1. Sınıf', '1. Sınıf'),
@@ -1078,6 +1080,9 @@ class Firm(models.Model):
     firm_domain = models.CharField(max_length=250, verbose_name="Domain", blank=False, null=False)
     bulk_file = models.FileField(upload_to='excel/', verbose_name='Excel Dosyası', null=True)
 
+    def __str__(self):
+        return self.firm_name
+
 
 class Company(models.Model):
     company_name = models.CharField(max_length=250, choices=Girisimler, verbose_name="Girişim Adı", blank=False, null=False)
@@ -1086,6 +1091,9 @@ class Company(models.Model):
     girisim_kategorisi = models.CharField(max_length=250, choices=Girisim_Kategorileri, verbose_name="Girişim Kategorisi", blank=False, null=True)
     bootcamp_name = models.CharField(verbose_name="Bootcamp Adı", null=True, blank=False, max_length=250, choices=universiteler)
     enterprise_summary = models.CharField(max_length=450, verbose_name="Girişim Özeti", null=True)
+
+    def __str__(self):
+        return self.company_name
 
 
 class User(AbstractUser):
@@ -1097,7 +1105,7 @@ class User(AbstractUser):
     dogum_gunu = models.DateTimeField(default=timezone.datetime.now, verbose_name="Doğum Günü", blank=False, null=False)
     cinsiyet = models.CharField(default=Cinsiyetler[0][0], max_length=250, choices=Cinsiyetler, verbose_name="Cinsiyet", blank=False, null=False)
     universite = models.CharField(default=universiteler[0][0], max_length=250, choices=universiteler, verbose_name="Üniversite", blank=False, null=False)
-    sınıf = models.CharField(default=Sınıflar[0][0], max_length=250, choices=Sınıflar, verbose_name="Sınıf", blank=False, null=False)
+    sinif = models.CharField(default=Siniflar[0][0], max_length=250, choices=Siniflar, verbose_name="Sınıf", blank=False, null=False)
     bolum = models.CharField(default=bolumler[0][0], max_length=250, choices=bolumler, verbose_name="Bölüm", blank=False, null=False)
     telefon = models.CharField(default='', max_length=11, verbose_name="Telefon", blank=False, null=False)
     linkedin_url = models.URLField(default='', max_length=250, verbose_name="Linkedin URL", blank=True, null=False)
@@ -1112,21 +1120,62 @@ class User(AbstractUser):
     pass
 
 
-class Batch:
-    batch_name = models.CharField(max_length=250, verbose_name="Batch Adı", blank=False, null=False)
+class Article(models.Model):
+    article_header = models.CharField(max_length=350, verbose_name="Article Başlığı", blank=False, null=False)
+    article_description = models.TextField(verbose_name="Article Açıklaması", blank=False, null=False)
+    date_created = models.DateField(auto_now=True, verbose_name="Oluşturma Tarihi", blank=False, null=False)
+    image_900 = models.FileField(upload_to='article_images/', verbose_name='Article Image', null=False)
+    text = models.TextField(verbose_name="Yazı İçeriği", blank=False, null=False)
+
+    def __str__(self):
+        return self.article_header
 
 
-class Module:
+class Survey(models.Model):
+    survey_header = models.CharField(max_length=350, verbose_name="Anket Başlığı", blank=False, null=False)
+    survey_description = models.TextField(verbose_name="Anket Açıklaması", blank=False, null=False)
+    date_created = models.DateField(auto_now=True, verbose_name="Oluşturma Tarihi", blank=False, null=False)
+
+    def __str__(self):
+        return self.survey_header
+
+
+class Video(models.Model):
+    video_header = models.CharField(max_length=350, verbose_name="Video Başlığı", blank=False, null=False)
+    article_description = models.TextField(verbose_name="Video Açıklaması", blank=False, null=False)
+    date_created = models.DateField(auto_now=True, verbose_name="Oluşturma Tarihi", blank=False, null=False)
+    video = models.FileField(upload_to='videos/', verbose_name='Videos', null=True)
+
+    def __str__(self):
+        return self.video_header
+
+
+class Content(models.Model):
+    content_type = models.CharField(max_length=250, choices=ContentTypes, verbose_name="İçerik Tipi", blank=False, null=False)
+    article = models.ForeignKey(Article, on_delete=models.CASCADE, null=True, blank=True)
+    survey = models.ForeignKey(Survey, on_delete=models.CASCADE, null=True, blank=True)
+    video = models.ForeignKey(Video, on_delete=models.CASCADE, null=True, blank=True)
+
+    def __str__(self):
+        return self.article or self.survey or self.video
+    
+
+class Module(models.Model):
     module_name = models.CharField(max_length=250, verbose_name="Modül Adı", blank=False, null=False)
 
+    def __str__(self):
+        return self.module_name
 
-class Content:
-    content_type = models.CharField(max_length=250, verbose_name="İçerik Tipi", blank=False, null=False)
 
+class Batch(models.Model):
+    batch_name = models.CharField(max_length=250, verbose_name="Batch Adı", blank=False, null=False)
+    module = models.ForeignKey(Module, on_delete=models.CASCADE, null=True, blank=True)
+
+    def __str__(self):
+        return self.batch_name
 
 # User._meta.get_field('username')._unique = False
 # User._meta.get_field('username').blank = True
 # User._meta.get_field('username').null = True
 User._meta.get_field('email')._unique = True
 # User._meta.get_field('first_name').verbose_name = 'Ad Soyad'
-

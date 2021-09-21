@@ -12,3 +12,5 @@ openpyxl==3.0.7
 python-decouple==3.4
 sendgrid==6.7.1
 django-hosts==4.0
+django-storages==1.11.1
+boto3==1.18.41
