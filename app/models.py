@@ -1210,9 +1210,6 @@ class Survey(models.Model):
     survey_header = models.CharField(max_length=350, verbose_name="Anket Başlığı", blank=False, null=False)
     survey_description = models.TextField(verbose_name="Anket Açıklaması", blank=False, null=False)
     date_created = models.DateField(auto_now_add=True, verbose_name="Oluşturma Tarihi", blank=False, null=False)
-    text_q_count = models.IntegerField(verbose_name="Text Soru Sayısı", blank=False, null=False)
-    test_q_count = models.IntegerField(verbose_name="Test Soru Sayısı", blank=False, null=False)
-    selection_q_count = models.IntegerField(verbose_name="Dropdown Soru Sayısı", blank=False, null=False)
     text_question = models.ManyToManyField(TextQuestion, blank=True)
     option_question = models.ManyToManyField(OptionQuestion, blank=True)
     choice_question = models.ManyToManyField(MultipleQuestion, blank=True)
@@ -1221,15 +1218,7 @@ class Survey(models.Model):
         return self.survey_header
 
     def save(self, *args, **kwargs):
-        get_q_counts(instance=self)
         super(Survey, self).save(*args, **kwargs)
-
-
-@receiver(post_save, sender=Survey)
-def get_q_counts(instance, **kwargs):
-    instance.text_q_count = len(instance.text_question.all())
-    instance.test_q_count = len(instance.choice_question.all())
-    instance.selection_q_count = len(instance.option_question.all())
 
 
 class SurveyAnswer(models.Model):
