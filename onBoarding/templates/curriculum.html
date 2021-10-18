@@ -5,142 +5,140 @@
 {% block content %}
 
     <!-- Header -->
-        <div class="header pb-8 pt-lg-8 d-flex align-items-center"
-             style="max-height: 300px; background-image: url({% static 'assets/img/theme/profile-cover.jpg' %}) ; background-size: cover; background-position: center top;">
-            <!-- Mask -->
-            <span class="mask bg-gradient-default opacity-8"></span>
-            <!-- Header container -->
-            <div class="container-fluid d-flex align-items-center">
-                <div class="row">
-                    <div class="col-lg-7 col-md-10">
-                        <h1 class="display-2 text-white right">BATCH 1</h1>
-                        <p class="text-white mt-0 mb-5">Burası BATCH 1 için hazırlanmış sayfa. Burada BATCH 1 özelindeki modülleri görüntüleyebilirsin.</p>
-                        <!--            <a href="#!" class="btn btn-info">Edit profile</a>-->
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-xl-10 center mt-lg--7">
-                <div class="progress-wrapper">
-                    <div class="progress-info">
-                        <div class="progress-label">
-                            <span style="color: #fb6340; background: rgb(243,220,206);">Toplam Tamamlanan</span>
-                        </div>
-                        <div class="progress-percentage">
-                            <span>60%</span>
-                        </div>
-                    </div>
-                    <div class="progress" style="min-height: 12px;">
-                        <div class="progress-bar bg-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-{#<div class="bg-secondary">#}
-{#    <div class="progress-wrapper">#}
-{#        <div class="progress-info">#}
-{#            <div class="progress-label">#}
-{#                <span>Tamamlanan</span>#}
-{#            </div>#}
-{#            <div class="progress-percentage">#}
-{#                <span>60%</span>#}
-{#            </div>#}
-{#        </div>#}
-{#        <div class="progress">#}
-{#            <div class="progress-bar bg-primary" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;"></div>#}
-{#        </div>#}
-{#    </div>#}
-{#</div>#}
-<br>
-<div class="card bg-secondary shadow">
-    <div id="accordion">
-        <div class="card">
-            <div class="card-header" id="heading0" style="margin-left: 41%">
-                <div class="row">
-                    <div class="col-10">
-                            <a class="card-header active btn btn-link" role="button" data-toggle="collapse" data-target="#collapse0" aria-expanded="true" aria-controls="collapse0">
-                                <h1 class="mb-0">
-                                    <i class="fas fa-angle-down"></i>
-                                    Modul 1
-                                </h1>
-                            </a>
-                    </div>
-                    <div class="col-2">
-                        <div class="progress2 green">
-                            <div class="progress-value">90%</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div id="collapse0" class="collapse" aria-labelledby="heading0" data-parent="#accordion">
-                <div class="card-body">
-                    <a role="button" href="#">
-                        <div class="card">
-                            <div id="collapse0" class="collapse" aria-labelledby="heading0">
-                                <div class="card-body">
-                                    Text
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                    <div class="card">
-                        <div class="text-right pr-1 pt-2">
-                            <span class="badge badge-pill badge-success col-sm-2">
-                                <span class="badge-dot">
-                                    <i class="bg-success"></i>
-                                    <span class="status">Tamamlandı</span>
-                                </span>
-                            </span>
-                        </div>
-                        <a role="button" href="#">
-                            <div id="collapse0" class="collapse" aria-labelledby="heading0">
-                                <div class="card-body align-items-start">
-                                    Video
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="card">
-                        <div class="text-right pr-1 pt-2">
-                            <span class="badge badge-pill badge-danger col-sm-2">
-                                <span class="badge-dot">
-                                    <i class="bg-danger"></i>
-                                    <span class="status">Tamamlanmadı</span>
-                                </span>
-                            </span>
-                        </div>
-                        <a role="button" href="#">
-                            <div id="collapse0" class="collapse" aria-labelledby="heading0">
-                                <div class="card-body">
-                                    <div class="media">
-                                        <div class="pull-left">
-                                            <img class="media-object" src="http://placekitten.com/150/150">
-                                        </div>
-                                        <div class="media-body ml-2">
-                                            <h4 class="media-heading">Receta 1</h4>
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis pharetra varius quam sit amet vulputate.
-                                                Quisque mauris augue, molestie tincidunt condimentum vitae, gravida a libero. Aenean sit amet felis
-                                                dolor, in sagittis nisi. Sed ac orci quis tortor imperdiet venenatis. Duis elementum auctor accumsan.
-                                                Aliquam in felis sit amet augue.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
+    <div class="header pb-8 pt-lg-8 d-flex align-items-center"
+         style="max-height: 300px; background-image: url({% static 'assets/img/theme/profile-cover.jpg' %}) ; background-size: cover; background-position: center top;">
+        <!-- Mask -->
+        <span class="mask bg-gradient-default opacity-8"></span>
+        <!-- Header container -->
+        <div class="container-fluid d-flex align-items-center">
+            <div class="row">
+                <div class="col-lg-7 col-md-10">
+                    <h1 class="display-2 text-white right">{{ batch_name }}</h1>
+                    <p class="text-white mt-0 mb-5">{{ batch_description }}</p>
+                    <!--            <a href="#!" class="btn btn-info">Edit profile</a>-->
                 </div>
             </div>
         </div>
     </div>
-</div>
-</div>
-</div>
+    <div class="container-fluid mt--2">
+    <div class="row">
+        <div class="col-xl-10 center mt-lg--7">
+            <div class="progress-wrapper">
+                <div class="progress-info">
+                    <div class="progress-label">
+                        <span style="color: #fb6340; background: rgb(243,220,206);">Toplam Tamamlanan</span>
+                    </div>
+                    <div class="progress-percentage">
+                        <span>60%</span>
+                    </div>
+                </div>
+                <div class="progress" style="min-height: 12px;">
+                    <div class="progress-bar bg-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0"
+                         aria-valuemax="100" style="width: 60%;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {#<div class="bg-secondary">#}
+    {#    <div class="progress-wrapper">#}
+    {#        <div class="progress-info">#}
+    {#            <div class="progress-label">#}
+    {#                <span>Tamamlanan</span>#}
+    {#            </div>#}
+    {#            <div class="progress-percentage">#}
+    {#                <span>60%</span>#}
+    {#            </div>#}
+    {#        </div>#}
+    {#        <div class="progress">#}
+    {#            <div class="progress-bar bg-primary" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;"></div>#}
+    {#        </div>#}
+    {#    </div>#}
+    {#</div>#}
+    <br>
+    {% if messages %}
+        <div class="col-lg-6 center">
+            {% for message in messages %}
+                {% if message.tags == 'error' %}
+                    <div class="alert alert-danger" style="text-align: center">{{ message }}</div>
+                {% elif message.tags == 'success' %}
+                    <div class="alert alert-success" style="text-align: center">{{ message }}</div>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <br>
+    {% endif %}
+    <div class="card bg-secondary shadow">
+        <div id="accordion">
+            {% for module in modules %}
+                <div class="card">
+                    <div class="card-header" id="heading{{ module.id }}" style="margin-left: 41%">
+                        <div class="row">
+                            <div class="col-10">
+                                <a class="card-header active btn btn-link" role="button" data-toggle="collapse"
+                                   data-target="#collapse{{ module.id }}" aria-expanded="true"
+                                   aria-controls="collapse{{ module.id }}">
+                                    <h1 class="mb-0">
+                                        <i class="fas fa-angle-down"></i>
+                                        {{ module.module_name }}
+                                    </h1>
+                                </a>
+                            </div>
+                            <div class="col-2">
+                                <div class="progress2 green">
+                                    <div class="progress-value">90%</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% for content in content_list %}
+                        {% if content.module_related_id == module.id %}
+                        <div id="collapse{{ module.id }}" class="collapse" aria-labelledby="heading{{ module.id }}"
+                             data-parent="#accordion">
+                            <div class="card-body">
+                                <div class="card">
+                                    <div class="text-right pr-1 pt-2">
+                                        <span class="badge badge-pill badge-danger col-sm-2">
+                                            <span class="badge-dot">
+                                                <i class="bg-danger"></i>
+                                                <span class="status">Tamamlanmadı</span>
+                                            </span>
+                                        </span>
+                                    </div>
+
+                                    <a role="button" {% if content.content_type == 'Text' %}
+                                                        href="/article/{{ content }}"
+                                                        {% elif content.content_type == 'Anket' %}
+                                                        href="/anket/{{ content }}"
+                                                        {% elif content.content_type == 'Video' %}
+                                                        href="/video/{{ content }}"
+                                                     {% endif %}>
+                                        <div id="collapse{{ module.id }}" class="collapse"
+                                             aria-labelledby="heading{{ module.id }}">
+                                            <div class="card-body">
+                                                <div class="media">
+                                                    <div class="pull-left">
+                                                        <img class="media-object" src="{{ content.content_image.url }}" alt="{{ content }}" width="150">
+                                                    </div>
+                                                    <div class="media-body ml-2">
+                                                        <h4 class="media-heading">{{ content }}</h4>
+                                                        <p>{{ content.content_description }}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+            {% include "includes/footer.html" %}
 </div>
 
-    <footer>
-        {% include "includes/footer.html" %}
-    </footer>
 {% endblock content %}
 
 <!-- Specific JS goes HERE -->

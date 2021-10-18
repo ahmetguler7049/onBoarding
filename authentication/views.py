@@ -22,6 +22,9 @@ from django.contrib.sites.shortcuts import get_current_site
 from openpyxl import *
 from django.utils.encoding import force_bytes, force_text
 
+from app import models
+import vimeo
+
 
 def recaptcha_kontrol(request):
     recaptcha_response = request.POST.get('g-recaptcha-response')
@@ -39,7 +42,15 @@ def recaptcha_kontrol(request):
 
 @login_required(login_url="user_login_view")
 def index(request):
-    return render(request, "index.html")
+    user = User.objects.get(id=request.user.id)
+    firm = user.firm
+    batches = Batch.objects.select_related().filter(firm=firm)
+
+    context = {
+        'batches': batches,
+    }
+
+    return render(request, "index.html", context=context)
 
 
 def user_login_view(request):
@@ -213,7 +224,7 @@ def Bulk_Add_Users(request):
 
         firm.bulk_file = excel_file
         firm.save()
-        book = load_workbook(str(settings.MEDIA_ROOT) + '/excel/{}'.format(excel_file))
+        book = load_workbook(firm.bulk_file)
         sheet = book.active
 
         # Sending mails for per user one by one.
@@ -236,7 +247,7 @@ def Bulk_Add_Users(request):
 
                 link = reverse('complete_profile_view', kwargs={
                     'uidb64': email_body['uid'], 'token': email_body['token']})
-                activate_url = 'http://' + domain + link
+                activate_url = 'https://' + domain + link
 
                 message = Mail(
                     from_email='accelerator@university4society.com',

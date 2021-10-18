@@ -3,11 +3,15 @@
 # from django.contrib.auth.models import AbstractUser
 from django.utils import timezone
 
+from onBoarding import settings
 
 """Declare models for YOUR_APP app."""
 
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
+from django_vimeo import fields
+from django.db.models.signals import post_save, pre_save
+from django.dispatch import receiver
 
 
 class UserManager(BaseUserManager):
@@ -149,7 +153,9 @@ Siniflar = [
 ]
 
 universiteler = [
-    ('Adana Alparslan Türkeş Bilim ve Teknoloji Üniversitesi', 'Adana Alparslan Türkeş Bilim ve Teknoloji Üniversitesi'),
+    (
+        'Adana Alparslan Türkeş Bilim ve Teknoloji Üniversitesi',
+        'Adana Alparslan Türkeş Bilim ve Teknoloji Üniversitesi'),
     ('Çukurova Üniversitesi', 'Çukurova Üniversitesi'),
     ('Adıyaman Üniversitesi', 'Adıyaman Üniversitesi'),
     ('Afyon Kocatepe Üniversitesi', 'Afyon Kocatepe Üniversitesi'),
@@ -474,7 +480,8 @@ bolumler = [
     ('Deri Konfeksiyon ', 'Deri Konfeksiyon '),
     ('Deri Mühendisliği  ', 'Deri Mühendisliği  '),
     ('Deri Teknolojisi ', 'Deri Teknolojisi '),
-    ('Dezenfeksiyon, Sterilizasyon ve Antisepsi Teknikerliği ', 'Dezenfeksiyon, Sterilizasyon ve Antisepsi Teknikerliği '),
+    ('Dezenfeksiyon, Sterilizasyon ve Antisepsi Teknikerliği ',
+     'Dezenfeksiyon, Sterilizasyon ve Antisepsi Teknikerliği '),
     ('Dijital Fabrika Teknolojileri ', 'Dijital Fabrika Teknolojileri '),
     ('Dijital Oyun Tasarımı  ', 'Dijital Oyun Tasarımı  '),
     ('Dil ve Konuşma Terapisi  ', 'Dil ve Konuşma Terapisi  '),
@@ -1078,18 +1085,23 @@ Girisim_Kategorileri = [
 class Firm(models.Model):
     firm_name = models.CharField(max_length=250, verbose_name="Firma Adı", blank=False, null=False)
     firm_domain = models.CharField(max_length=250, verbose_name="Domain", blank=False, null=False)
-    bulk_file = models.FileField(upload_to='excel/', verbose_name='Excel Dosyası', null=True)
+    bulk_file = models.FileField(upload_to='excel', verbose_name='Excel Dosyası', blank=True, null=True)
+    firm_logo = models.FileField(upload_to='firm_logos', verbose_name='Firma Logosu', blank=True, null=True)
 
     def __str__(self):
         return self.firm_name
 
 
 class Company(models.Model):
-    company_name = models.CharField(max_length=250, choices=Girisimler, verbose_name="Girişim Adı", blank=False, null=False)
+    company_name = models.CharField(max_length=250, choices=Girisimler, verbose_name="Girişim Adı", blank=False,
+                                    null=False)
     team_size = models.IntegerField(verbose_name="Ekip Büyüklüğü", blank=True, null=True)
-    is_tech_exist = models.CharField(max_length=250, choices=Is_Tech_Exist, verbose_name="Teknik Üye Var mı", blank=False, null=True)
-    girisim_kategorisi = models.CharField(max_length=250, choices=Girisim_Kategorileri, verbose_name="Girişim Kategorisi", blank=False, null=True)
-    bootcamp_name = models.CharField(verbose_name="Bootcamp Adı", null=True, blank=False, max_length=250, choices=universiteler)
+    is_tech_exist = models.CharField(max_length=250, choices=Is_Tech_Exist, verbose_name="Teknik Üye Var mı",
+                                     blank=False, null=True)
+    girisim_kategorisi = models.CharField(max_length=250, choices=Girisim_Kategorileri,
+                                          verbose_name="Girişim Kategorisi", blank=False, null=True)
+    bootcamp_name = models.CharField(verbose_name="Bootcamp Adı", null=True, blank=False, max_length=250,
+                                     choices=universiteler)
     enterprise_summary = models.CharField(max_length=450, verbose_name="Girişim Özeti", null=True)
 
     def __str__(self):
@@ -1101,12 +1113,17 @@ class User(AbstractUser):
     REQUIRED_FIELDS = []
     username = None
 
-    sehir = models.CharField(default='İstanbul', max_length=250, choices=Cities, verbose_name="Şehir", blank=False, null=False)
+    sehir = models.CharField(default='İstanbul', max_length=250, choices=Cities, verbose_name="Şehir", blank=False,
+                             null=False)
     dogum_gunu = models.DateTimeField(default=timezone.datetime.now, verbose_name="Doğum Günü", blank=False, null=False)
-    cinsiyet = models.CharField(default=Cinsiyetler[0][0], max_length=250, choices=Cinsiyetler, verbose_name="Cinsiyet", blank=False, null=False)
-    universite = models.CharField(default=universiteler[0][0], max_length=250, choices=universiteler, verbose_name="Üniversite", blank=False, null=False)
-    sinif = models.CharField(default=Siniflar[0][0], max_length=250, choices=Siniflar, verbose_name="Sınıf", blank=False, null=False)
-    bolum = models.CharField(default=bolumler[0][0], max_length=250, choices=bolumler, verbose_name="Bölüm", blank=False, null=False)
+    cinsiyet = models.CharField(default=Cinsiyetler[0][0], max_length=250, choices=Cinsiyetler, verbose_name="Cinsiyet",
+                                blank=False, null=False)
+    universite = models.CharField(default=universiteler[0][0], max_length=250, choices=universiteler,
+                                  verbose_name="Üniversite", blank=False, null=False)
+    sinif = models.CharField(default=Siniflar[0][0], max_length=250, choices=Siniflar, verbose_name="Sınıf",
+                             blank=False, null=False)
+    bolum = models.CharField(default=bolumler[0][0], max_length=250, choices=bolumler, verbose_name="Bölüm",
+                             blank=False, null=False)
     telefon = models.CharField(default='', max_length=11, verbose_name="Telefon", blank=False, null=False)
     linkedin_url = models.URLField(default='', max_length=250, verbose_name="Linkedin URL", blank=True, null=False)
     bio = models.CharField(default='', max_length=999, verbose_name="Hakkımda", blank=True, null=False)
@@ -1121,61 +1138,173 @@ class User(AbstractUser):
 
 
 class Article(models.Model):
-    article_header = models.CharField(max_length=350, verbose_name="Article Başlığı", blank=False, null=False)
+    article_header = models.CharField(max_length=350, verbose_name="Article Başlığı", blank=True, null=True)
     article_description = models.TextField(verbose_name="Article Açıklaması", blank=False, null=False)
-    date_created = models.DateField(auto_now=True, verbose_name="Oluşturma Tarihi", blank=False, null=False)
-    image_900 = models.FileField(upload_to='article_images/', verbose_name='Article Image', null=False)
+    date_created = models.DateField(auto_now_add=True, verbose_name="Oluşturma Tarihi", blank=False, null=False)
+    image_900 = models.FileField(upload_to='article_images', verbose_name='Article Image', null=False,
+                                 help_text="Fotoğrafınızın boyutunun oranının 9:4 olmasına dikkat edin")
     text = models.TextField(verbose_name="Yazı İçeriği", blank=False, null=False)
 
     def __str__(self):
         return self.article_header
 
 
+class MultipleQuestion(models.Model):
+    actual_question = models.CharField(max_length=350, verbose_name="Test Sorusu", blank=False, null=False)
+    q_order = models.IntegerField(verbose_name="Sorunun Sıra Numarası", blank=False, null=False)
+
+    class Meta:
+        ordering = ('q_order',)
+
+    def __str__(self):
+        return self.actual_question
+
+
+class MultipleChoice(models.Model):
+    actual_question = models.ForeignKey(MultipleQuestion, on_delete=models.CASCADE, null=True, blank=True)
+    choice = models.CharField(max_length=350, verbose_name="Şık", blank=False)
+    q_order = models.IntegerField(verbose_name="Şık Sıra Numarası", blank=False)
+
+    class Meta:
+        ordering = ('q_order',)
+
+    def __str__(self):
+        return self.choice
+
+
+class OptionQuestion(models.Model):
+    actual_question = models.CharField(max_length=550, verbose_name="Seçimlik Soru", blank=False)
+    q_order = models.IntegerField(verbose_name="Sorunun Sıra Numarası", blank=False)
+
+    class Meta:
+        ordering = ('q_order',)
+
+    def __str__(self):
+        return self.actual_question
+
+
+class OptionChoice(models.Model):
+    actual_question = models.ForeignKey(OptionQuestion, on_delete=models.CASCADE, null=True, blank=True)
+    choice = models.CharField(max_length=350, verbose_name="Seçenek", blank=False, null=False)
+    q_order = models.IntegerField(verbose_name="Seçenek Sıra Numarası", blank=False, null=False)
+
+    class Meta:
+        ordering = ('q_order',)
+
+    def __str__(self):
+        return self.choice
+
+
+class TextQuestion(models.Model):
+    actual_question = models.CharField(max_length=350, verbose_name="Text Sorusu", blank=False, null=False)
+    q_order = models.IntegerField(verbose_name="Sorunun Sıra Numarası", blank=False, null=False)
+
+    def __str__(self):
+        return self.actual_question
+
+    class Meta:
+        ordering = ('q_order',)
+
+
 class Survey(models.Model):
     survey_header = models.CharField(max_length=350, verbose_name="Anket Başlığı", blank=False, null=False)
     survey_description = models.TextField(verbose_name="Anket Açıklaması", blank=False, null=False)
-    date_created = models.DateField(auto_now=True, verbose_name="Oluşturma Tarihi", blank=False, null=False)
+    date_created = models.DateField(auto_now_add=True, verbose_name="Oluşturma Tarihi", blank=False, null=False)
+    text_q_count = models.IntegerField(verbose_name="Text Soru Sayısı", blank=False, null=False)
+    test_q_count = models.IntegerField(verbose_name="Test Soru Sayısı", blank=False, null=False)
+    selection_q_count = models.IntegerField(verbose_name="Dropdown Soru Sayısı", blank=False, null=False)
+    text_question = models.ManyToManyField(TextQuestion, blank=True)
+    option_question = models.ManyToManyField(OptionQuestion, blank=True)
+    choice_question = models.ManyToManyField(MultipleQuestion, blank=True)
 
     def __str__(self):
         return self.survey_header
 
+    def save(self, *args, **kwargs):
+        get_q_counts(instance=self)
+        super(Survey, self).save(*args, **kwargs)
+
+
+@receiver(post_save, sender=Survey)
+def get_q_counts(instance, **kwargs):
+    instance.text_q_count = len(instance.text_question.all())
+    instance.test_q_count = len(instance.choice_question.all())
+    instance.selection_q_count = len(instance.option_question.all())
+
+
+class SurveyAnswer(models.Model):
+    survey_participant = models.ForeignKey(User, verbose_name="Anket Katılımcısı", on_delete=models.CASCADE)
+    survey = models.ForeignKey(Survey, verbose_name="İlgili Anket", on_delete=models.CASCADE)
+
+
+class SurveyAnswerFromQuestionText(models.Model):
+    survey_answer = models.ForeignKey(SurveyAnswer, verbose_name="İlgili Cevap", on_delete=models.CASCADE)
+    question = models.ForeignKey(TextQuestion, verbose_name="İlgili Text Sorusu", on_delete=models.CASCADE)
+    answer = models.CharField(max_length=450, verbose_name="Text Cevabı", blank=True, null=True)
+
+
+class SurveyAnswerFromQuestionOption(models.Model):
+    survey_answer = models.ForeignKey(SurveyAnswer, verbose_name="İlgili Cevap", on_delete=models.CASCADE)
+    question = models.ForeignKey(OptionQuestion, verbose_name="İlgili Dropdown", on_delete=models.CASCADE)
+    answer = models.ForeignKey(OptionChoice, verbose_name="Dropdown Cevabı", on_delete=models.CASCADE, blank=True,
+                               null=True)
+
+
+class SurveyAnswerFromQuestionChoice(models.Model):
+    survey_answer = models.ForeignKey(SurveyAnswer, verbose_name="İlgili Cevap", on_delete=models.CASCADE)
+    question = models.ForeignKey(MultipleQuestion, verbose_name="İlgili Seçimlik Soru", on_delete=models.CASCADE)
+    answer = models.ForeignKey(MultipleChoice, verbose_name="Çoktan Seçmeli Cevabı", on_delete=models.CASCADE,
+                               blank=True, null=True)
+
 
 class Video(models.Model):
     video_header = models.CharField(max_length=350, verbose_name="Video Başlığı", blank=False, null=False)
-    article_description = models.TextField(verbose_name="Video Açıklaması", blank=False, null=False)
-    date_created = models.DateField(auto_now=True, verbose_name="Oluşturma Tarihi", blank=False, null=False)
-    video = models.FileField(upload_to='videos/', verbose_name='Videos', null=True)
+    video_description = models.TextField(verbose_name="Video Açıklaması", blank=False, null=False)
+    date_created = models.DateField(auto_now_add=True, verbose_name="Oluşturma Tarihi", blank=False, null=False)
+    video = fields.VimeoField(null=True, blank=True)
 
     def __str__(self):
         return self.video_header
 
 
-class Content(models.Model):
-    content_type = models.CharField(max_length=250, choices=ContentTypes, verbose_name="İçerik Tipi", blank=False, null=False)
-    article = models.ForeignKey(Article, on_delete=models.CASCADE, null=True, blank=True)
-    survey = models.ForeignKey(Survey, on_delete=models.CASCADE, null=True, blank=True)
-    video = models.ForeignKey(Video, on_delete=models.CASCADE, null=True, blank=True)
+class Batch(models.Model):
+    batch_name = models.CharField(max_length=250, verbose_name="Batch Adı", blank=False, null=False)
+    batch_description = models.TextField(verbose_name="Batch Açıklaması", blank=False, null=True)
+    firm = models.ForeignKey(Firm, on_delete=models.CASCADE, blank=False, null=False)
 
     def __str__(self):
-        return self.article or self.survey or self.video
-    
+        return self.batch_name
+
 
 class Module(models.Model):
     module_name = models.CharField(max_length=250, verbose_name="Modül Adı", blank=False, null=False)
+    batch_related = models.ForeignKey(Batch, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return self.module_name
 
 
-class Batch(models.Model):
-    batch_name = models.CharField(max_length=250, verbose_name="Batch Adı", blank=False, null=False)
-    module = models.ForeignKey(Module, on_delete=models.CASCADE, null=True, blank=True)
+class Content(models.Model):
+    content_type = models.CharField(max_length=250, choices=ContentTypes, verbose_name="İçerik Tipi", blank=False,
+                                    null=False)
+    content_description = models.TextField(verbose_name="Content Açıklaması", blank=False, null=True)
+    content_image = models.FileField(upload_to='content_images', verbose_name='Content Fotoğrafı', blank=True, null=True,
+                                     help_text="Fotoğrafınızın boyutunun 150x150 olmasına dikkat edin")
+    article = models.ForeignKey(Article, on_delete=models.CASCADE, null=True, blank=True)
+    survey = models.ForeignKey(Survey, on_delete=models.CASCADE, null=True, blank=True)
+    video = models.ForeignKey(Video, on_delete=models.CASCADE, null=True, blank=True)
+    module_related = models.ForeignKey(Module, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
-        return self.batch_name
+        if self.article:
+            return self.article.article_header
+        if self.survey:
+            return self.survey.survey_header
+        if self.video:
+            return self.video.video_header
 
-# User._meta.get_field('username')._unique = False
-# User._meta.get_field('username').blank = True
-# User._meta.get_field('username').null = True
+
 User._meta.get_field('email')._unique = True
-# User._meta.get_field('first_name').verbose_name = 'Ad Soyad'
+Video._meta.get_field('video_header')._unique = True
+Survey._meta.get_field('survey_header')._unique = True
+Article._meta.get_field('article_header')._unique = True

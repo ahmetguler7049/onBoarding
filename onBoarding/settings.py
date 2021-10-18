@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'authentication',
     'whitenoise.runserver_nostatic',
     'onBoarding',
+    'django_vimeo',
 ]
 
 MIDDLEWARE = [
@@ -207,3 +208,10 @@ AWS_S3_ACCESS_KEY_ID = config("AWS_S3_ACCESS_KEY_ID")
 AWS_S3_SECRET_ACCESS_KEY = config("AWS_S3_SECRET_ACCESS_KEY")
 AWS_STORAGE_BUCKET_NAME = "letsacademy-downloads"
 AWS_QUERYSTRING_AUTH = False
+
+VIMEO_CACHE_BACKEND = 'default' # Default: None
+VIMEO_CACHE_EXPIRES = 100 # Default: 300 seconds
+
+VIMEO_CLIENT_ID = config("VIMEO_CLIENT_ID")
+VIMEO_CLIENT_SECRET = config("VIMEO_CLIENT_SECRET")
+VIMEO_ACCESS_TOKEN = config("VIMEO_ACCESS_TOKEN")

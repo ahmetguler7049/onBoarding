@@ -6,18 +6,17 @@
 
     <!-- Header -->
     <div class="header pb-8 pt-lg-8 d-flex align-items-center"
-             style="max-height: 300px; background-image: url({% static 'assets/img/theme/profile-cover.jpg' %}) ; background-size: cover; background-position: center top;">
-            <!-- Mask -->
-            <span class="mask bg-gradient-default opacity-8"></span>
-            <!-- Header container -->
-            <div class="container-fluid align-items-center">
-                <div class="row">
-                    <div class="col-lg-7 col-md-10">
-                        <p class="text-white mt-0 mb-5">Anket Notu veya Açıklama:</p>
-                        <!--            <a href="#!" class="btn btn-info">Edit profile</a>-->
-                    </div>
+         style="max-height: 300px; background-image: url({% static 'assets/img/theme/profile-cover.jpg' %}) ; background-size: cover; background-position: center top;">
+        <!-- Mask -->
+        <span class="mask bg-gradient-default opacity-8"></span>
+        <!-- Header container -->
+        <div class="container-fluid align-items-center">
+            <div class="row">
+                <div class="col-lg-7 col-md-10">
+                    <p class="text-white mt-0 mb-5">{{ survey_description }}</p>
                 </div>
             </div>
+        </div>
     </div>
 
     <div class="container-fluid mt--5">
@@ -27,62 +26,54 @@
                     <form method="POST">
                         {% csrf_token %}
                         <div class="card-header bg-white border-0">
-                            <div class="text-info text-right fst-italic mb-2">Oluşturma Tarihi: ../../....</div>
-                            <h2 class="mb-0 text-center">Anket Başlığı</h2>
+                            <div class="text-info text-right fst-italic mb-2">Oluşturma Tarihi: {{ date_created }}</div>
+                            <h2 class="mb-0 text-center">{{ survey_header}}</h2>
                         </div>
-                        <div class="col-lg-6 center">
-                            {% if messages %}
-                                {% for message in messages %}
-                                    {% if message.tags == 'error' %}
-                                        <div class="alert alert-danger" style="text-align: center">{{ message }}</div>
-                                    {% elif message.tags == 'success' %}
-                                        <div class="alert alert-success" style="text-align: center">{{ message }}</div>
-                                    {% endif %}
-                                {% endfor %}
-                            {% endif %}
-                        </div>
+
                         <div class="card-body">
-                            <div class="pl-lg-4">
-                                <div class="description">
-                                    <h4>Question bla bla selamlar merhaba?</h4>
-                                    <br>
-                                </div>
-                                <div class="custom-control custom-radio mb-1">
-                                    <input type="radio" id="customRadio1" name="customRadio" class="custom-control-input">
-                                    <label class="custom-control-label" for="customRadio1">Seçenek 1</label>
-                                </div>
-                                <div class="custom-control custom-radio mb-1">
-                                    <input type="radio" id="customRadio2" name="customRadio" class="custom-control-input">
-                                    <label class="custom-control-label" for="customRadio2">Seçenek 2</label>
-                                </div>
-                                <div class="custom-control custom-radio mb-1">
-                                    <input type="radio" id="customRadio3" name="customRadio" class="custom-control-input">
-                                    <label class="custom-control-label" for="customRadio3">Seçenek 3</label>
-                                </div>
-                                <div class="custom-control custom-radio mb-1">
-                                    <input type="radio" id="customRadio4" name="customRadio" class="custom-control-input">
-                                    <label class="custom-control-label" for="customRadio4">Seçenek 4</label>
-                                </div>
-                            </div>
-                            <hr class="my-4" />
-                            <!-- Address -->
-                            <div class="pl-lg-4">
-                                <label for="exampleFormControlSelect1">Seç</label>
-                                <select class="form-control" id="exampleFormControlSelect1">
-                                    <option>Seçenek 1</option>
-                                    <option>Seçenek 2</option>
-                                    <option>Seçenek 3</option>
-                                    <option>Seçenek 4</option>
-                                    <option>Seçenek 5</option>
-                                </select>
-                            </div>
-                            <hr class="my-4" />
+                            {% for field in form %}
+                                {% if 'text_question' in field.id_for_label %}
+                                    <div class="description ml-2">
+                                        <h4>{{ field.label }}</h4>
+                                        <br>
+                                    </div>
+                                    <div class="pl-lg-2">
+                                        <div class="form-group">
+                                            {{ field }}
+                                        </div>
+                                    </div>
+
+                                {% elif 'option_question' in field.id_for_label %}
+                                    <div class="pl-lg-2">
+
+                                        <select class="form-control" id="exampleFormControlSelect{{ ch_id }}" name="{{ field.name }}">
+                                            {% for ch_id, option in field.choices %}
+                                                <option value={{ ch_id }}>{{ option }}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <label class="description h4" for="exampleFormControlSelect{{ ch_id }}">{{ field.label }}</label>
+                                    </div>
+
+                                {% elif 'choice_question' in field.id_for_label %}
+                                    <div class="pl-lg-2">
+                                        <div class="description">
+                                            <h4>{{ field.label }}</h4>
+                                            <br>
+                                        </div>
+                                        {% for ch_id, choice in field.choices %}
+                                            <div class="custom-control custom-radio mb-1">
+                                                <input type="radio" id="customRadio{{ ch_id }}" name="{{ field.name }}" value="{{ ch_id }}" class="custom-control-input">
+                                                <label class="custom-control-label" for="customRadio{{ ch_id }}">{{ choice }}</label>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                                <hr class="my-4" />
+                            {% endfor %}
+
                             <!-- Description -->
-                            <div class="pl-lg-4">
-                                <div class="form-group">
-                                    <label for="exampleFormControlTextarea1">Text Area</label>
-                                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="4"></textarea>
-                                </div>
+                            <div class="text-center">
+                                <button name="submit_survey" type="submit" class="btn btn-default">Bitir</button>
                             </div>
                         </div>
                     </form>

@@ -9,8 +9,10 @@ from django.utils.safestring import mark_safe
 from .models import *
 from django.db.models import Q
 from authentication.forms import SignUpForm, CompanyForm, CompanyDisabledFields
+from app.forms import *
 from django.utils.encoding import force_bytes, force_text, DjangoUnicodeDecodeError
 from django.utils.http import urlsafe_base64_decode
+from django import forms
 
 
 def validation_control(request, user_values=None):
@@ -143,6 +145,10 @@ def complete_profile_view(request, uidb64, token):
 
 @login_required(login_url="/login/")
 def edit_profile(request):
+    user = User.objects.get(id=request.user.id)
+    firm = user.firm
+    batches = Batch.objects.select_related().filter(firm=firm)
+
     form = SignUpForm(request.POST or None)
     if not request.user.is_authenticated:
         form.fields['password'].required = True
@@ -166,7 +172,6 @@ def edit_profile(request):
 
             team_leader_checkbox = request.POST.get("team_leader_checkbox")
 
-            user = request.user
             if user.company:
                 delete_company = user.company.company_name
             else:
@@ -228,6 +233,7 @@ def edit_profile(request):
 
     context = {
         'form': form,
+        'batches': batches,
     }
     return render(request, 'profile.html', context=context)
 
@@ -273,8 +279,11 @@ def edit_profile(request):
 
 
 def ekip(request):
-    form = CompanyForm(request.POST or None)
+    user = User.objects.get(id=request.user.id)
+    firm = user.firm
+    batches = Batch.objects.select_related().filter(firm=firm)
 
+    form = CompanyForm(request.POST or None)
     if 'complete_company' in request.POST:
         if form.is_valid():
             company_name = form.cleaned_data.get("company_name")
@@ -300,7 +309,6 @@ def ekip(request):
     # Save data of the user's when there is a change in form
     elif 'save_changes_on_company' in request.POST:
         if form.is_valid():
-            user = User.objects.get(id=request.user.id)
             if user.is_teamleader:
                 company_name = form.cleaned_data.get("company_name")
                 team_size = form.cleaned_data.get("team_size")
@@ -320,7 +328,6 @@ def ekip(request):
                 return redirect('ekip')
 
     if request.user.is_authenticated:
-        user = User.objects.get(id=request.user.id)
         if user.company:
             company_filler = Company.objects.get(id=user.company_id)
             company_filler = company_filler.__dict__
@@ -332,25 +339,196 @@ def ekip(request):
 
     context = {
         'form': form,
+        'batches': batches,
     }
     return render(request, 'my_team.html', context=context)
 
 
 @login_required(login_url="/login/")
-def curriculum(request):
-    return render(request, "curriculum.html")\
+def curriculum(request, batch_name):
+    user = User.objects.get(id=request.user.id)
+    firm = user.firm
+    batches = Batch.objects.select_related().filter(firm=firm)
+
+    batch = Batch.objects.get(batch_name=batch_name)
+    batch_description = batch.batch_description
+    modules = Module.objects.select_related().filter(batch_related=batch.id)
+    content_list = Content.objects.filter(module_related__batch_related_id=batch.id)
+
+    context = {
+        'batches': batches,
+        'batch_name': batch_name,
+        'batch_description': batch_description,
+        'modules': modules,
+        'content_list': content_list,
+    }
+
+    return render(request, "curriculum.html", context=context)
 
 
 @login_required(login_url="/login/")
-def article_view(request):
-    return render(request, "article.html")
+def article_view(request, article_header):
+    user = User.objects.get(id=request.user.id)
+    firm = user.firm
+    batches = Batch.objects.select_related().filter(firm=firm)
+
+    article = Article.objects.get(article_header__iexact=article_header)
+    article_description = article.article_description
+    date_created = article.date_created.strftime("%d/%m/%Y")
+    image_900 = article.image_900
+    text = article.text
+
+    context = {
+        "article_header": article_header,
+        "article_description": article_description,
+        "date_created": date_created,
+        "image_900": image_900,
+        "text": text,
+        "batches": batches
+    }
+
+    return render(request, "article.html", context=context)
 
 
 @login_required(login_url="/login/")
-def video_view(request):
-    return render(request, "video.html")
+def video_view(request, video_header):
+    user = User.objects.get(id=request.user.id)
+    firm = user.firm
+    batches = Batch.objects.select_related().filter(firm=firm)
+
+    video_instance = Video.objects.get(video_header__iexact=video_header)
+    date_created = video_instance.date_created.strftime("%d/%m/%Y")
+    video_embedded = video_instance.video
+    video_description = video_instance.video_description
+
+    context = {
+        "video_header": video_header,
+        "video_description": video_description,
+        "video_embedded": video_embedded,
+        "date_created": date_created,
+        "batches": batches,
+    }
+
+    return render(request, "video.html", context=context)
 
 
 @login_required(login_url="/login/")
-def anket_view(request):
-    return render(request, "anket.html")
+def anket_view(request, survey_header):
+    user = User.objects.get(id=request.user.id)
+    firm = user.firm
+    batches = Batch.objects.select_related().filter(firm=firm)
+
+    survey = Survey.objects.get(survey_header__iexact=survey_header)
+    date_created = survey.date_created.strftime("%d/%m/%Y")
+    survey_description = survey.survey_description
+
+    text_question_form = TextQuestionForm(request.POST or None)
+    option_question_form = OptionQuestionForm(request.POST or None)
+    choice_question_form = ChoiceQuestionForm(request.POST or None)
+
+    form = forms.Form()
+
+    text_questions = survey.text_question.all()
+    option_questions = survey.option_question.all()
+    choice_questions = survey.choice_question.all()
+    my_questions = {}
+
+    # Sorulara type ve sıra ataması yapıyoruz.
+    for ques in text_questions:
+        ques.type = 1
+        my_questions[ques] = ques.q_order
+    for ques in option_questions:
+        ques.type = 2
+        my_questions[ques] = ques.q_order
+    for ques in choice_questions:
+        ques.type = 3
+        my_questions[ques] = ques.q_order
+
+    my_questions = list({k: v for k, v in sorted(my_questions.items(), key=lambda item: item[1])}.keys())
+
+    for my_question in my_questions:
+        if my_question.type == 1:
+            form.fields["text_question_" + str(my_question.id)] = text_question_form.fields['text_question']
+            form.fields["text_question_" + str(my_question.id)].label = my_question.actual_question
+
+        elif my_question.type == 2:
+            form.fields["option_question_" + str(my_question.id)] = option_question_form.fields['option_question']
+            form["option_question_" + str(my_question.id)].label = my_question.actual_question
+            choices = []
+            choice_objs = OptionChoice.objects.select_related().filter(actual_question=my_question)
+            for obj in choice_objs:
+                choices.append((obj.id, obj.choice))
+            form["option_question_" + str(my_question.id)].choices = choices
+
+        elif my_question.type == 3:
+            form.fields["choice_question_" + str(my_question.id)] = choice_question_form.fields['choice_question']
+            form["choice_question_" + str(my_question.id)].label = my_question.actual_question
+            choices = []
+            choice_objs = MultipleChoice.objects.select_related().filter(actual_question=my_question)
+            for obj in choice_objs:
+                choices.append((obj.id, obj.choice))
+            form["choice_question_" + str(my_question.id)].choices = choices
+
+    if 'submit_survey' in request.POST:
+        query_dict = request.POST
+        my_dict = dict(query_dict.items())
+        del my_dict['csrfmiddlewaretoken']
+        del my_dict['submit_survey']
+        question_list = []
+        for key in my_dict.keys():
+            question_list.append(key)
+
+        answer_list = []
+        for value in my_dict.values():
+            answer_list.append(value)
+
+        survey_answer, is_created = SurveyAnswer.objects.get_or_create(
+            defaults={'survey_participant': user},
+            survey=survey,
+        )
+
+        for question in question_list:
+            if 'text_question' in question:
+                q_id = question.replace('text_question_', '')
+                text_answer, is_created = SurveyAnswerFromQuestionText.objects.get_or_create(
+                    defaults={'survey_answer': survey_answer},
+                    question=TextQuestion.objects.get(pk=q_id),
+                )
+                text_answer.answer = my_dict[str(question)]
+                text_answer.save()
+
+            if 'option_question' in question:
+                q_id = question.replace('option_question_', '')
+                option_answer, is_created = SurveyAnswerFromQuestionOption.objects.get_or_create(
+                    defaults={'survey_answer': survey_answer},
+                    question=OptionQuestion.objects.get(pk=q_id),
+                )
+                option_answer.answer = OptionChoice.objects.get(pk=my_dict[question])
+                option_answer.save()
+
+            if 'choice_question' in question:
+                q_id = question.replace('choice_question_', '')
+                choice_answer, is_created = SurveyAnswerFromQuestionChoice.objects.get_or_create(
+                    defaults={'survey_answer': survey_answer},
+                    question=MultipleQuestion.objects.get(pk=q_id),
+                )
+                choice_answer.answer = MultipleChoice.objects.get(pk=my_dict[question])
+                choice_answer.save()
+
+        msg = "Cevaplarınız başarıyla iletildi"
+        messages.success(request, mark_safe(msg))
+
+        context = {
+            'batches': batches
+        }
+        return redirect('curriculum', context=context)
+
+    context = {
+        "survey_header": survey_header,
+        "survey_description": survey_description,
+        "date_created": date_created,
+        "my_questions": my_questions,
+        "form": form,
+    }
+
+    return render(request, "anket.html", context=context)

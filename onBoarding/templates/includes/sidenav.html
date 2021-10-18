@@ -1,5 +1,4 @@
 {% load static %}
-
 <nav class="navbar navbar-vertical fixed-left navbar-expand-md navbar-light bg-white" id="sidenav-main">
     <div class="container-fluid">
         <!-- Toggler -->
@@ -8,7 +7,7 @@
         </button>
         <!-- Brand -->
         <a class="navbar-brand pt-0" href="/">
-            <img src="{% static 'assets/img/brand/blue.png' %}" class="navbar-brand-img" alt="...">
+            <img src="{{ request.user.firm.firm_logo.url }}" class="navbar-brand-img" alt="Logo" style="max-height: 100px; max-width: 100px">
         </a>
         <!-- User -->
         <ul class="nav align-items-center d-md-none">
@@ -33,28 +32,20 @@
           </a>
           <div class="dropdown-menu dropdown-menu-arrow dropdown-menu-right">
             <div class=" dropdown-header noti-title">
-              <h6 class="text-overflow m-0">Welcome!</h6>
+              <h6 class="text-overflow m-0">Hoşgeldin!</h6>
             </div>
             <a href="{% url 'profile' %}" class="dropdown-item">
               <i class="ni ni-single-02"></i>
               <span>Profilim</span>
             </a>
-            <a href="{% url 'profile' %}" class="dropdown-item">
-              <i class="ni ni-settings-gear-65"></i>
-              <span>Settings</span>
-            </a>
-            <a href="/profile.html" class="dropdown-item">
-              <i class="ni ni-calendar-grid-58"></i>
-              <span>Activity</span>
-            </a>
             <a href="/profile.html" class="dropdown-item">
               <i class="ni ni-support-16"></i>
-              <span>Support</span>
+              <span>Destek</span>
             </a>
             <div class="dropdown-divider"></div>
             <a href="{% url 'logout' %}" class="dropdown-item">
               <i class="ni ni-user-run"></i>
-              <span>Logout</span>
+              <span>Çıkış Yap</span>
             </a>
           </div>
         </ul>
@@ -64,7 +55,7 @@
             <div class="navbar-collapse-header d-md-none">
                 <div class="row">
                     <div class="col-6 collapse-brand">
-                        <a href="{% url 'home' %}"><
+                        <a href="{% url 'home' %}">
                             <img src="{% static 'assets/img/theme/team-4-800x800.jpg' %}">
                         </a>
                     </div>
@@ -115,24 +106,20 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="#navbar-dashboards" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="navbar-dashboards">
+                        <a class="nav-link active" href="#navbar-dashboards" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="navbar-dashboards">
                             <i class="ni ni-books text-blue"></i>
                             <span class="nav-link-text">Curriculum</span>
                         </a>
                         <div class="collapse" id="navbar-dashboards">
                             <ul class="nav nav-sm flex-column">
-                                <li class="nav-item">
-                                    <a href="{% url 'ekip' %}" class="nav-link">
-                                        <i class="ni ni-book-bookmark text-green"></i>
-                                        <span class="sidenav-normal"> BATCH 1 </span>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{% url 'profile' %}" class="nav-link">
-                                        <i class="ni ni-book-bookmark text-green"></i>
-                                        <span class="sidenav-normal"> BATCH 2 </span>
-                                    </a>
-                                </li>
+                                {% for batch_name in batches %}
+                                    <li class="nav-item">
+                                        <a href="{% url 'curriculum' batch_name=batch_name %}" class="nav-link">
+                                            <i class="ni ni-book-bookmark text-green"></i>
+                                            <span class="sidenav-normal"> {{ batch_name }} </span>
+                                        </a>
+                                    </li>
+                                {% endfor %}
                             </ul>
                         </div>
                     </li>
@@ -154,28 +141,6 @@
                         <i class="ni ni-user-run text-red"></i> Çıkış yap
                     </a>
                 </li>
-            </ul>
-            <!-- Divider -->
-            <hr class="my-3">
-            <!-- Heading -->
-            <h6 class="navbar-heading text-muted">Links</h6>
-            <!-- Navigation -->
-            <ul class="navbar-nav mb-md-3">
-
-                <li class="nav-item">
-                    <a class="nav-link" target="_blank"
-                       href="https://github.com/creativetimofficial/argon-dashboard-django">
-                        <i class="ni ni-ui-04"></i> Source Code
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" target="_blank"
-                       href="https://www.creative-tim.com/templates/django">
-                        <i class="ni ni-spaceship"></i> More Django Apps
-                    </a>
-                </li>
-
             </ul>
         </div>
     </div>

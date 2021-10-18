@@ -10,10 +10,10 @@ urlpatterns = [
     # path('plan/', views.is_teamleader, name='is_teamleader')
     path('kullanıcılar/', views.Bulk_Add_Users, name='Bulk_Add_Users'),
     path('profil/', views.edit_profile, name='profile'),
-    path('curriculum/', views.curriculum, name='curriculum'),
-    path('article/', views.article_view, name='article_view'),
-    path('video/', views.video_view, name='video_view'),
-    path('anket/', views.anket_view, name='anket_view'),
+    path('curriculum/<batch_name>/', views.curriculum, name='curriculum'),
+    path('article/<article_header>', views.article_view, name='article_view'),
+    path('video/<video_header>', views.video_view, name='video_view'),
+    path('anket/<survey_header>', views.anket_view, name='anket_view'),
     path('activate/<uidb64>/<token>', views.complete_profile_view, name='complete_profile_view'),
 ]
 
