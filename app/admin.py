@@ -119,6 +119,8 @@ class SurveyAnswerAdmin(admin.ModelAdmin):
 
 @admin.register(Batch)
 class BatchAdmin(admin.ModelAdmin):
+    readonly_fields = ('firm',)
+
     def save_model(self, request, obj, form, change):
         obj.firm = request.user.firm
         super().save_model(request, obj, form, change)

@@ -1289,7 +1289,7 @@ class Video(models.Model):
 class Batch(models.Model):
     batch_name = models.CharField(max_length=250, verbose_name="Batch Adı", blank=False, null=False)
     batch_description = models.TextField(verbose_name="Batch Açıklaması", blank=False, null=True)
-    firm = models.ForeignKey(Firm, on_delete=models.CASCADE, blank=False, null=True, editable=False)
+    firm = models.ForeignKey(Firm, on_delete=models.CASCADE, blank=False, null=True)
 
     def __str__(self):
         return self.batch_name
