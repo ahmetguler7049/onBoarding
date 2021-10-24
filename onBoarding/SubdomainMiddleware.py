@@ -29,10 +29,7 @@ class SubdomainMiddleware(MiddlewareMixin):
 
             http_protocol = 'https://'
             if redirect_subdomain and (current_subdomain != redirect_subdomain):
-                if view_func == "django.contrib.admin.sites.index" and request.user.is_firm_manager:
-                    redirect_url = http_protocol + redirect_subdomain + '.' + settings.DEFAULT_SITE_DOMAIN + '/admin/' + parameters
-                else:
-                    redirect_url = http_protocol + redirect_subdomain + '.' + settings.DEFAULT_SITE_DOMAIN + reverse(view_func) + parameters
+                redirect_url = http_protocol + redirect_subdomain + '.' + settings.DEFAULT_SITE_DOMAIN + reverse(view_func) + parameters
                 return redirect(redirect_url)
             elif not redirect_subdomain and (current_subdomain != redirect_subdomain):
                 redirect_url = http_protocol + settings.DEFAULT_SITE_DOMAIN + reverse(view_func) + parameters
