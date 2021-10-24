@@ -94,7 +94,7 @@
                 <!--              <i class="ni ni-pin-3 text-orange"></i> Maps-->
                 <!--            </a>-->
                 <!--          </li>-->
-                {% if not request.user.is_firm_manager %}
+                {% if not request.user.is_firm_manager and not request.user.is_superuser %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'profile' %}">
                             <i class="ni ni-single-02 text-yellow"></i> Profilim
@@ -127,6 +127,11 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'Bulk_Add_Users' %}">
                             <i class="fa fa-users text-blue"></i> Kullanıcılar
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'admin:index' %}">
+                            <i class="ni ni-settings text-green"></i> Admin Panel
                         </a>
                     </li>
                 {% endif %}

@@ -28,8 +28,11 @@ class SubdomainMiddleware(MiddlewareMixin):
                         redirect_subdomain = request.user.firm.firm_domain
             http_protocol = 'https://'
             if redirect_subdomain and (current_subdomain != redirect_subdomain):
-                redirect_url = http_protocol + redirect_subdomain + '.' + settings.DEFAULT_SITE_DOMAIN + reverse(view_func) + parameters
-                return redirect(redirect_url)
+                if request.user.is_firm_manager:
+                    return None
+                else:
+                    redirect_url = http_protocol + redirect_subdomain + '.' + settings.DEFAULT_SITE_DOMAIN + reverse(view_func) + parameters
+                    return redirect(redirect_url)
             elif not redirect_subdomain and (current_subdomain != redirect_subdomain):
                 redirect_url = http_protocol + settings.DEFAULT_SITE_DOMAIN + reverse(view_func) + parameters
                 return redirect(redirect_url)
