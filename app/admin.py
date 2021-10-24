@@ -41,9 +41,6 @@ class CompanyAdmin(admin.ModelAdmin):
     search_fields = ['company_name', ]
     list_filter = ['team_size', 'is_tech_exist', ]
 
-    class Meta:
-        model = Company
-
 
 @admin.register(Firm)
 class FirmAdmin(admin.ModelAdmin):
@@ -52,9 +49,6 @@ class FirmAdmin(admin.ModelAdmin):
     # list_editable = ['code', 'valid_from', 'valid_to', 'value', ]
     search_fields = ['firm_name', ]
     # list_filter = ['team_size', 'is_tech_exist', ]
-
-    class Meta:
-        model = Firm
 
 
 # @admin.register(Survey)
@@ -68,7 +62,6 @@ class FirmAdmin(admin.ModelAdmin):
 #     class Meta:
 #         model = Survey
 
-
 class MultipleChoiceAdmin(admin.TabularInline):
 
     model = MultipleChoice
@@ -81,7 +74,6 @@ class MultipleQuestionAdmin(admin.ModelAdmin):
         MultipleChoiceAdmin,
     ]
 
-    model = MultipleQuestion
 
 
 class OptionChoiceAdmin(admin.TabularInline):
@@ -96,7 +88,6 @@ class OptionQuestionAdmin(admin.ModelAdmin):
         OptionChoiceAdmin,
     ]
 
-    model = OptionQuestion
 
 
 class TextAnswerAdmin(admin.TabularInline):
@@ -123,14 +114,19 @@ class SurveyAnswerAdmin(admin.ModelAdmin):
         ChoiceAnswerAdmin,
     ]
 
-    list_display = ['survey_participant', 'survey',]
-    model = SurveyAnswer
+    list_display = ['survey_participant', 'survey']
+
+
+@admin.register(Batch)
+class BatchAdmin(admin.ModelAdmin):
+    def save_model(self, request, obj, form, change):
+        obj.firm = request.user.firm
+        super().save_model(request, obj, form, change)
 
 
 admin.site.register(Article)
 admin.site.register(Video)
 admin.site.register(Survey)
-admin.site.register(Content)
 admin.site.register(Module)
-admin.site.register(Batch)
 admin.site.register(TextQuestion)
+admin.site.register(Content)

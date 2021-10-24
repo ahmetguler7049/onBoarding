@@ -105,12 +105,12 @@
                                         </span>
                                     </div>
 
-                                    <a role="button" {% if content.content_type == 'Text' %}
-                                                        href="/article/{{ content }}"
+                                    <a role="button" {% if content.content_type == 'Video' %}
+                                                        href="{% url 'video_view' batch_name=batch_name module_name=module video_header=content %}"
                                                         {% elif content.content_type == 'Anket' %}
-                                                        href="/anket/{{ content }}"
-                                                        {% elif content.content_type == 'Video' %}
-                                                        href="/video/{{ content }}"
+                                                        href="{% url 'anket_view' batch_name=batch_name module_name=module survey_header=content %}"
+                                                        {% elif content.content_type == 'Text' %}
+                                                        href="{% url 'article_view' batch_name=batch_name module_name=module article_header=content %}"
                                                      {% endif %}>
                                         <div id="collapse{{ module.id }}" class="collapse"
                                              aria-labelledby="heading{{ module.id }}">

@@ -30,7 +30,7 @@
   <!-- Favicon - loaded as static -->
     <link href="{% static 'assets/js/plugins/nucleo/css/nucleo.css' %}" rel="stylesheet"/>
 
-  <link href="{% static 'assets/img/brand/favicon.png' %}" rel="icon" type="image/png">
+  <link href="{{ request.user.firm.firm_logo.url }}" rel="icon" type="image/png">
   
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">

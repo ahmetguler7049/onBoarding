@@ -13,7 +13,6 @@
             <div class="row">
                 <div class="col-lg-7 col-md-10 mt-7">
                     <h1 class="display-4 text-white right">{{ video_header }}</h1>
-                    <p class="text-white mt-0 mb-5">{{ video_description }}</p>
                     <!--            <a href="#!" class="btn btn-info">Edit profile</a>-->
                 </div>
             </div>
@@ -27,22 +26,16 @@
                 <!-- Post meta content-->
                 <div class="text-info fst-italic mb-2">Oluşturma Tarihi: {{ date_created }}</div>
             </header>
-            <div class="row">
-                <div class="col-xl-10 center">
-                    <!-- Post content-->
-                    <article>
-                        <!-- Post header-->
-
-                        <!-- Preview image figure-->
-                        <div class="embed-responsive embed-responsive-16by9">
-                            {% vimeo video_embedded width=600 %}
-                        </div>
-                        <!-- Post content-->
-                        <div class="mb-5 mt-4">
-                            <p class="fs-5 mb-4 drop-caps">{{ video_description }}</p>
-                        </div>
-                    </article>
-                    <!-- Comments section-->
+            <div class="col-lg-8 text-center mt-5">
+                <article>
+                    <div class="mb-4">
+                        {% vimeo video_embedded width=800 %}
+                    </div>
+                </article>
+            </div>
+            <div class="col-lg-8 center ml-4">
+                <div class="mb-5 mt-4 drop-caps">
+                    <p class="fs-5 mb-4">{{ video_description }}</p>
                 </div>
             </div>
         </div>

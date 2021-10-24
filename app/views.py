@@ -367,7 +367,7 @@ def curriculum(request, batch_name):
 
 
 @login_required(login_url="/login/")
-def article_view(request, article_header):
+def article_view(request, article_header, batch_name, module_name):
     user = User.objects.get(id=request.user.id)
     firm = user.firm
     batches = Batch.objects.select_related().filter(firm=firm)
@@ -384,14 +384,14 @@ def article_view(request, article_header):
         "date_created": date_created,
         "image_900": image_900,
         "text": text,
-        "batches": batches
+        "batches": batches,
     }
 
     return render(request, "article.html", context=context)
 
 
 @login_required(login_url="/login/")
-def video_view(request, video_header):
+def video_view(request, video_header, batch_name, module_name):
     user = User.objects.get(id=request.user.id)
     firm = user.firm
     batches = Batch.objects.select_related().filter(firm=firm)
@@ -413,7 +413,7 @@ def video_view(request, video_header):
 
 
 @login_required(login_url="/login/")
-def anket_view(request, survey_header):
+def anket_view(request, survey_header, batch_name, module_name):
     user = User.objects.get(id=request.user.id)
     firm = user.firm
     batches = Batch.objects.select_related().filter(firm=firm)

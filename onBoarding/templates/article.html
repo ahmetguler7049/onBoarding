@@ -4,42 +4,44 @@
 
 {% block content %}
     <div class="header pb-8 pt-lg-8 d-flex align-items-center"
-             style="max-height: 300px; background-image: url({% static 'assets/img/theme/profile-cover.jpg' %}) ; background-size: cover; background-position: center top;">
-            <!-- Mask -->
-            <span class="mask bg-gradient-default opacity-8"></span>
-            <!-- Header container -->
-            <div class="container-fluid d-flex align-items-center">
-                <div class="row">
-                    <div class="col-lg-7 col-md-10">
-                        <h1 class="display-4 text-white right">{{ article_header }}</h1>
-                        <p class="text-white mt-0 mb-5">{{ article_description }}</p>
-                        <!--            <a href="#!" class="btn btn-info">Edit profile</a>-->
-                    </div>
-                </div>
-            </div>
-        </div>
-    <body>
-        <!-- Page content-->
-        <div class="container mt-5">
+         style="max-height: 300px; background-image: url({% static 'assets/img/theme/profile-cover.jpg' %}) ; background-size: cover; background-position: center top;">
+        <!-- Mask -->
+        <span class="mask bg-gradient-default opacity-8"></span>
+        <!-- Header container -->
+        <div class="container-fluid d-flex align-items-center">
             <div class="row">
-                <header class="mb-4">
-                    <div class="text-info fst-italic mb-2">Oluşturma Tarihi: {{ date_created }}</div>
-                </header>
-                <div class="col-xl-8 ">
-                    <!-- Post content-->
-                    <article>
-                        <!-- Preview video figure-->
-                        <figure class="mb-4"><img class="img-fluid rounded" src="{{ image_900.url }}" alt="{{ article_header }}" /></figure>
-                        <!-- Post content-->
-                        <div class="mb-5 drop-caps">
-                            <p class="fs-5 mb-4">{{ text }}</p>
-                        </div>
-                    </article>
-                    <!-- Comments section-->
+                <div class="col-lg-7 col-md-10">
+                    <h1 class="display-4 text-white right">{{ article_header }}</h1>
+                    <p class="text-white mt-0 mb-5">{{ article_description }}</p>
+                    <!--            <a href="#!" class="btn btn-info">Edit profile</a>-->
                 </div>
             </div>
-            {% include "includes/footer.html" %}
         </div>
+    </div>
+    <body>
+    <!-- Page content-->
+    <div class="container mt-5">
+        <div class="row">
+            <header class="mb-4">
+                <div class="text-info fst-italic mb-2">Oluşturma Tarihi: {{ date_created }}</div>
+            </header>
+            <div class="col-lg-8 text-center">
+                <!-- Post content-->
+                <article>
+                    <!-- Preview video figure-->
+                    <figure class="mb-4"><img class="rounded" style="height: 360px !important; width: 810px !important;" src="{{ image_900.url }}" alt="{{ article_header }}" /></figure>
+                    <!-- Post content-->
+                </article>
+                <!-- Comments section-->
+            </div>
+            <div class="col-lg-8 ml-5 mt-5">
+                <div class="mb-5 drop-caps ">
+                    <p class="fs-5 mb-4">{{ text }}</p>
+                </div>
+            </div>
+        </div>
+        {% include "includes/footer.html" %}
+    </div>
     </body>
 
 {% endblock content %}

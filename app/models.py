@@ -1091,6 +1091,10 @@ class Firm(models.Model):
     def __str__(self):
         return self.firm_name
 
+    class Meta:
+        verbose_name = "Firma"
+        verbose_name_plural = "Firmalar"
+
 
 class Company(models.Model):
     company_name = models.CharField(max_length=250, choices=Girisimler, verbose_name="Girişim Adı", blank=False,
@@ -1106,6 +1110,10 @@ class Company(models.Model):
 
     def __str__(self):
         return self.company_name
+
+    class Meta:
+        verbose_name = "Girişim"
+        verbose_name_plural = "Girişimler"
 
 
 class User(AbstractUser):
@@ -1148,6 +1156,10 @@ class Article(models.Model):
     def __str__(self):
         return self.article_header
 
+    class Meta:
+        verbose_name = "Yazı İçeriği"
+        verbose_name_plural = "Yazı İçerikleri"
+
 
 class MultipleQuestion(models.Model):
     actual_question = models.CharField(max_length=350, verbose_name="Test Sorusu", blank=False, null=False)
@@ -1155,6 +1167,8 @@ class MultipleQuestion(models.Model):
 
     class Meta:
         ordering = ('q_order',)
+        verbose_name = "Çoktan Seçmeli Soru"
+        verbose_name_plural = "Çoktan Seçmeli Sorular"
 
     def __str__(self):
         return self.actual_question
@@ -1178,6 +1192,8 @@ class OptionQuestion(models.Model):
 
     class Meta:
         ordering = ('q_order',)
+        verbose_name = "Açılır Menülü Soru"
+        verbose_name_plural = "Açılır Menülü Sorular"
 
     def __str__(self):
         return self.actual_question
@@ -1204,6 +1220,8 @@ class TextQuestion(models.Model):
 
     class Meta:
         ordering = ('q_order',)
+        verbose_name = "Text Sorusu"
+        verbose_name_plural = "Text Soruları"
 
 
 class Survey(models.Model):
@@ -1220,10 +1238,18 @@ class Survey(models.Model):
     def save(self, *args, **kwargs):
         super(Survey, self).save(*args, **kwargs)
 
+    class Meta:
+        verbose_name = "Anket"
+        verbose_name_plural = "Anketler"
+
 
 class SurveyAnswer(models.Model):
     survey_participant = models.ForeignKey(User, verbose_name="Anket Katılımcısı", on_delete=models.CASCADE)
     survey = models.ForeignKey(Survey, verbose_name="İlgili Anket", on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = "Anket Cevabı"
+        verbose_name_plural = "Anket Cevapları"
 
 
 class SurveyAnswerFromQuestionText(models.Model):
@@ -1255,14 +1281,22 @@ class Video(models.Model):
     def __str__(self):
         return self.video_header
 
+    class Meta:
+        verbose_name = "Video İçeriği"
+        verbose_name_plural = "Video İçerikleri"
+
 
 class Batch(models.Model):
     batch_name = models.CharField(max_length=250, verbose_name="Batch Adı", blank=False, null=False)
     batch_description = models.TextField(verbose_name="Batch Açıklaması", blank=False, null=True)
-    firm = models.ForeignKey(Firm, on_delete=models.CASCADE, blank=False, null=False)
+    firm = models.ForeignKey(Firm, on_delete=models.CASCADE, blank=False, null=True, editable=False)
 
     def __str__(self):
         return self.batch_name
+
+    class Meta:
+        verbose_name = "Batch"
+        verbose_name_plural = "Batch'ler"
 
 
 class Module(models.Model):
@@ -1270,19 +1304,27 @@ class Module(models.Model):
     batch_related = models.ForeignKey(Batch, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
-        return self.module_name
+        m_name = str(self.module_name)
+        b_name = str(self.batch_related)
+        return b_name + " " + m_name
+
+    class Meta:
+        verbose_name = "Modül"
+        verbose_name_plural = "Modüller"
 
 
 class Content(models.Model):
     content_type = models.CharField(max_length=250, choices=ContentTypes, verbose_name="İçerik Tipi", blank=False,
                                     null=False)
     content_description = models.TextField(verbose_name="Content Açıklaması", blank=False, null=True)
-    content_image = models.FileField(upload_to='content_images', verbose_name='Content Fotoğrafı', blank=True, null=True,
-                                     help_text="Fotoğrafınızın boyutunun 150x150 olmasına dikkat edin")
+    content_image = models.FileField(upload_to='content_images', verbose_name='Content Fotoğrafı', blank=True,
+                                     null=True,
+                                     help_text="Fotoğrafınızın boyutunun 150x150 olmasına dikkat edin",
+                                     default="settings.MEDIA_ROOT/content-image.jpg")
     article = models.ForeignKey(Article, on_delete=models.CASCADE, null=True, blank=True)
     survey = models.ForeignKey(Survey, on_delete=models.CASCADE, null=True, blank=True)
     video = models.ForeignKey(Video, on_delete=models.CASCADE, null=True, blank=True)
-    module_related = models.ForeignKey(Module, on_delete=models.CASCADE, null=True, blank=True)
+    module_related = models.ForeignKey(Module, on_delete=models.CASCADE, null=True, blank=True, )
 
     def __str__(self):
         if self.article:
@@ -1291,6 +1333,10 @@ class Content(models.Model):
             return self.survey.survey_header
         if self.video:
             return self.video.video_header
+
+    class Meta:
+        verbose_name = "İçerik"
+        verbose_name_plural = "İçerikler"
 
 
 User._meta.get_field('email')._unique = True
