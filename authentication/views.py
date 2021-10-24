@@ -113,7 +113,7 @@ def admin_login_view(request):
                         if findUser.check_password(password):
                             user_login_check = authenticate(username=findUser, password=password)
                             login(request, user_login_check)
-                            return redirect("home")
+                            return redirect("admin:index")
                         else:
                             messages.error(request, mark_safe('Geçersiz Şifre!'))
                 except User.DoesNotExist:
