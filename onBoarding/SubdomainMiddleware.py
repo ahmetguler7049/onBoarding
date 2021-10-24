@@ -26,7 +26,8 @@ class SubdomainMiddleware(MiddlewareMixin):
                 if request.user.firm:
                     if request.user.firm.firm_domain:
                         redirect_subdomain = request.user.firm.firm_domain
-
+            print("view_func: ", view_func)
+            print("TYPE: ", type(view_func))
             http_protocol = 'https://'
             if redirect_subdomain and (current_subdomain != redirect_subdomain):
                 redirect_url = http_protocol + redirect_subdomain + '.' + settings.DEFAULT_SITE_DOMAIN + reverse(view_func) + parameters
