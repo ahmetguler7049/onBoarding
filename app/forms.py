@@ -4,29 +4,15 @@ from django.contrib.auth.forms import UserCreationForm
 from app.models import *
 
 
-# class TextQuestionForm(forms.ModelForm):
-#     class Meta:
-#         model = TextQuestion
-#         fields = ['text_answer']
-#         labels = {}
-#         widgets = {
-#             'text_answer': forms.TextInput(
-#                 attrs={
-#                     "class": "form-control",
-#                     "rows": "4",
-#                     "placeholder": "Cevabınız..."
-#                 }
-#             )
-#         }
-
-
 class TextQuestionForm(forms.Form):
     text_question = forms.CharField(
+        required=False,
         widget=forms.Textarea(
             attrs={
                 "class": "form-control",
                 "rows": "4",
-                "placeholder": "Cevabınız..."
+                "placeholder": "Cevabınız...",
+                "aria-required": "False",
             }
         )
     )
@@ -34,12 +20,13 @@ class TextQuestionForm(forms.Form):
 
 class OptionQuestionForm(forms.Form):
     option_question = forms.ChoiceField(
-        required=True,
+        required=False,
         disabled=False,
         choices=[],
         widget=forms.Select(
             attrs={
-                "class": "form-control"
+                "class": "form-control",
+                "aria-required": "False",
             }
         ),
     )
@@ -47,12 +34,13 @@ class OptionQuestionForm(forms.Form):
 
 class ChoiceQuestionForm(forms.Form):
     choice_question = forms.ChoiceField(
-        required=True,
+        required=False,
         disabled=False,
         choices=[],
         widget=forms.RadioSelect(
             attrs={
-                "class": "custom-control custom-radio mb-1"
+                "class": "custom-control custom-radio mb-1",
+                "aria-required": "False",
             }
         ),
     )

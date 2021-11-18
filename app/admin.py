@@ -32,6 +32,12 @@ class UserAdmin(DjangoUserAdmin):
     search_fields = ('email', 'first_name', 'last_name')
     ordering = ('email',)
 
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        if request.user.is_superuser:
+            return qs
+        return qs.filter(firm=request.user.firm)
+
 
 @admin.register(Company)
 class CompanyAdmin(admin.ModelAdmin):
@@ -89,25 +95,24 @@ class OptionQuestionAdmin(admin.ModelAdmin):
     ]
 
 
-
 class TextAnswerAdmin(admin.TabularInline):
-
+    readonly_fields = ('question', 'answer')
     model = SurveyAnswerFromQuestionText
 
 
 class OptionAnswerAdmin(admin.TabularInline):
-
+    readonly_fields = ('question', 'answer')
     model = SurveyAnswerFromQuestionOption
 
 
 class ChoiceAnswerAdmin(admin.TabularInline):
-
+    readonly_fields = ('question', 'answer')
     model = SurveyAnswerFromQuestionChoice
 
 
 @admin.register(SurveyAnswer)
 class SurveyAnswerAdmin(admin.ModelAdmin):
-
+    readonly_fields = ('survey', 'survey_participant')
     inlines = [
         TextAnswerAdmin,
         OptionAnswerAdmin,

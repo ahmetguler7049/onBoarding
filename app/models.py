@@ -1164,6 +1164,7 @@ class Article(models.Model):
 class MultipleQuestion(models.Model):
     actual_question = models.CharField(max_length=350, verbose_name="Test Sorusu", blank=False, null=False)
     q_order = models.IntegerField(verbose_name="Sorunun Sıra Numarası", blank=False, null=False)
+    is_required = models.BooleanField(verbose_name="Zorunlu Alan", blank=False, null=False, default=False)
 
     class Meta:
         ordering = ('q_order',)
@@ -1189,6 +1190,7 @@ class MultipleChoice(models.Model):
 class OptionQuestion(models.Model):
     actual_question = models.CharField(max_length=550, verbose_name="Seçimlik Soru", blank=False)
     q_order = models.IntegerField(verbose_name="Sorunun Sıra Numarası", blank=False)
+    is_required = models.BooleanField(verbose_name="Zorunlu Alan", blank=False, null=False, default=False)
 
     class Meta:
         ordering = ('q_order',)
@@ -1214,6 +1216,7 @@ class OptionChoice(models.Model):
 class TextQuestion(models.Model):
     actual_question = models.CharField(max_length=350, verbose_name="Text Sorusu", blank=False, null=False)
     q_order = models.IntegerField(verbose_name="Sorunun Sıra Numarası", blank=False, null=False)
+    is_required = models.BooleanField(verbose_name="Zorunlu Alan", blank=False, null=False, default=False)
 
     def __str__(self):
         return self.actual_question

@@ -45,13 +45,12 @@
 
                                 {% elif 'option_question' in field.id_for_label %}
                                     <div class="pl-lg-2">
-
+                                        <label class="description h4" for="exampleFormControlSelect{{ ch_id }}">{{ field.label }}</label>
                                         <select class="form-control" id="exampleFormControlSelect{{ ch_id }}" name="{{ field.name }}">
                                             {% for ch_id, option in field.choices %}
                                                 <option value={{ ch_id }}>{{ option }}</option>
                                             {% endfor %}
                                         </select>
-                                        <label class="description h4" for="exampleFormControlSelect{{ ch_id }}">{{ field.label }}</label>
                                     </div>
 
                                 {% elif 'choice_question' in field.id_for_label %}

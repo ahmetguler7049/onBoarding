@@ -450,10 +450,17 @@ def anket_view(request, survey_header, batch_name, module_name):
         if my_question.type == 1:
             form.fields["text_question_" + str(my_question.id)] = text_question_form.fields['text_question']
             form.fields["text_question_" + str(my_question.id)].label = my_question.actual_question
+            is_field_required = my_question.is_required
+            form.fields["text_question_" + str(my_question.id)].required = is_field_required
+            form.fields["text_question_" + str(my_question.id)].widget.attrs["aria-required"] = is_field_required
 
         elif my_question.type == 2:
             form.fields["option_question_" + str(my_question.id)] = option_question_form.fields['option_question']
             form["option_question_" + str(my_question.id)].label = my_question.actual_question
+            is_field_required = my_question.is_required
+            form.fields["option_question_" + str(my_question.id)].required = is_field_required
+            form.fields["option_question_" + str(my_question.id)].widget.attrs["aria-required"] = is_field_required
+
             choices = []
             choice_objs = OptionChoice.objects.select_related().filter(actual_question=my_question)
             for obj in choice_objs:
@@ -463,6 +470,10 @@ def anket_view(request, survey_header, batch_name, module_name):
         elif my_question.type == 3:
             form.fields["choice_question_" + str(my_question.id)] = choice_question_form.fields['choice_question']
             form["choice_question_" + str(my_question.id)].label = my_question.actual_question
+            is_field_required = my_question.is_required
+            form.fields["choice_question_" + str(my_question.id)].required = is_field_required
+            form.fields["choice_question_" + str(my_question.id)].widget.attrs["aria-required"] = is_field_required
+
             choices = []
             choice_objs = MultipleChoice.objects.select_related().filter(actual_question=my_question)
             for obj in choice_objs:
@@ -518,10 +529,7 @@ def anket_view(request, survey_header, batch_name, module_name):
         msg = "Cevaplarınız başarıyla iletildi"
         messages.success(request, mark_safe(msg))
 
-        context = {
-            'batches': batches
-        }
-        return redirect('curriculum', context=context)
+        return redirect("/curriculum/%s/" % batch_name)
 
     context = {
         "survey_header": survey_header,
@@ -529,6 +537,7 @@ def anket_view(request, survey_header, batch_name, module_name):
         "date_created": date_created,
         "my_questions": my_questions,
         "form": form,
+        'batches': batches,
     }
 
     return render(request, "anket.html", context=context)
