@@ -68,7 +68,7 @@
         <br>
     {% endif %}
     <div class="card bg-secondary shadow">
-        <div id="accordion">
+        <div class="accordion" id="accordion">
             {% for module in modules %}
                 <div class="card">
                     <div class="card-header" id="heading{{ module.id }}" style="margin-left: 41%">
@@ -90,11 +90,11 @@
                             </div>
                         </div>
                     </div>
+                <div id="collapse{{ module.id }}" class="collapse" aria-labelledby="heading{{ module.id }}"
+                             data-parent="#accordion">
+                    <div class="card-body">
                     {% for content in content_list %}
                         {% if content.module_related_id == module.id %}
-                        <div id="collapse{{ module.id }}" class="collapse" aria-labelledby="heading{{ module.id }}"
-                             data-parent="#accordion">
-                            <div class="card-body">
                                 <div class="card">
                                     <div class="text-right pr-1 pt-2">
                                         <span class="badge badge-pill badge-danger col-sm-2">
@@ -104,7 +104,6 @@
                                             </span>
                                         </span>
                                     </div>
-
                                     <a role="button" {% if content.content_type == 'Video' %}
                                                         href="{% url 'video_view' batch_name=batch_name module_name=module video_header=content %}"
                                                         {% elif content.content_type == 'Anket' %}
@@ -112,8 +111,6 @@
                                                         {% elif content.content_type == 'Text' %}
                                                         href="{% url 'article_view' batch_name=batch_name module_name=module article_header=content %}"
                                                      {% endif %}>
-                                        <div id="collapse{{ module.id }}" class="collapse"
-                                             aria-labelledby="heading{{ module.id }}">
                                             <div class="card-body">
                                                 <div class="media">
                                                     <div class="pull-left">
@@ -125,13 +122,12 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
                                     </a>
                                 </div>
-                            </div>
-                        </div>
                         {% endif %}
                     {% endfor %}
+                    </div>
+                </div>
                 </div>
             {% endfor %}
         </div>

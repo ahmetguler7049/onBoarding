@@ -81,7 +81,6 @@ class MultipleQuestionAdmin(admin.ModelAdmin):
     ]
 
 
-
 class OptionChoiceAdmin(admin.TabularInline):
 
     model = OptionChoice
